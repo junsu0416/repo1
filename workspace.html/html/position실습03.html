@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .parent {
+            
+            width: 950px;
+            height: 900px;
+            background-color: #6e52c7;
+
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            
+        }
+        .child {
+            position: relative;
+            left: -500px;
+            top: 100px;
+        }
+        .white {
+            background-color: white;
+            
+            width: 450px;
+            height: 450px;
+
+            position: relative;
+            bottom: 485px;
+            left: 90px;
+            
+            padding-top: 50px;
+            padding-right: 50px;
+            font-size: 150%;
+            text-align: right;
+            color: #6e52c7;
+            line-height: 55px;
+            letter-spacing: 5px;
+            
+                }
+        #under {
+
+            text-decoration: underline;
+
+        }
+        .font {
+            font-family: Merriweather, serif !important;
+            font-weight: 900;
+            font-size: 65px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="parent">
+        
+        <div class="child">
+            <img width="740" height="673" src="https://images03.nicepage.com/c461c07a441a5d220e8feb1a/e1900cdaa5c15cecae8746b6/rtyy-min.jpg">
+        </div>
+        <div class="white">
+            <h3>ABOUT US</h3>
+            <h1 class="font">Fashion<br>Trends<br>2021</h1>
+            <p>Images from <span id="under">Freepik</span></p>
+        </div>
+    </div>
+</body>
+</html>

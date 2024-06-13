@@ -1,0 +1,128 @@
+body {
+    margin: 0px;
+}
+
+div.first {
+    /* border: 20px solid red; */
+    border-top: 5px solid red;
+    border-right: 10px solid #0000ff;
+    border-bottom: 15px solid #00ff00;
+    border-left: 15px solid rgba(255,0,0,0.5);
+
+    /* solid는 border에만 */
+
+    /* padding 4방향 */
+    /* padding: 20px; */
+
+    padding-top: 50px;
+    padding-right: 40px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+
+    margin: 30px 50px;
+    /* 한 번에 변경방법 */
+    /* 이렇게 쓰면 위 오른쪽 아래 왼쪽으로 순서대로 변경 */
+    /* ex) 25 50 px 쓰면 위 아래, 좌우 변경 , 
+    4개를 연달아 쓰게 되면 위, 오른쪽, 아래, 왼쪽순
+    3개를 연달아 쓰면 위 좌우 아래 
+    2개를 연달아 쓰면 위아래 , 좌우
+    1개를 쓰면 상하좌우 모두 한 번에
+     */
+
+    width: 50%;
+    /* 브라우저의 사이즈의 퍼센티지(%) */
+    /* height: 50px; */
+
+}
+
+div.second {
+        
+    border : 1px solid red;
+    width : 200px;
+    margin : 20px auto;
+    /* 마진의 오토는 좌우만 가운데 정렬을 뜻한다  */
+    /* 양수면 밑으로 음수면 위로 */
+
+ }
+
+ div.third {
+
+    border : 1px solid red;
+    max-width : 700px;
+    min-width : 600px;
+
+    border-radius : 20px;
+ }
+
+ div.fourth img {
+
+    border-width: 2px;
+    border-style: dotted;
+    border-color: mistyrose;
+
+    width: 200px;
+    height: 200px;
+
+    margin: auto;
+    /* 나중에는 배울 거지만 이미지는 글자취급 글자는 마진 : 오토가 안 됨.
+     즉, 가운데 처리가 안 된다  */
+
+    border-radius: 50%;
+
+ }
+
+ div.talk {
+
+    width: 100px;
+    background-color: yellow;
+    border : 1px solid black;
+    padding : 10px;
+
+
+    border-radius : 20px 0px 20px 20px;
+
+ }
+
+    div.talk.left {
+
+    border-radius : 0px 20px 20px 20px;
+
+ }
+
+    div.talk.right {
+
+    border-radius : 20px 0px 20px 20px;
+    margin : 30px;    
+
+}
+
+#p, #c1, #c2 {
+    border : 1px solid red;
+}
+
+#p {
+    margin-top: 20px;
+}
+
+#c1 {
+    margin: 20px;
+}
+#c2 {
+    margin: 20px;
+}
+
+div.box {
+    border : 1px solid red;
+    margin : 10px;
+    padding : 50px; 
+    width : 50%;
+}
+
+div.box.border {
+
+    box-sizing: border-box;
+
+}
+
+ 
+

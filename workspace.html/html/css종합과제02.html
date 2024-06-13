@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        .flexbox {
+
+            /* display: flex;
+             
+            이부분이 내가 한 것.
+            
+            
+            justify-content: space-between;
+            background-color: #333; */
+
+
+
+            position: fixed; /* 이 부분을 추가하여 위쪽 상단을 고정합니다. */
+            top: 0; /* 화면의 맨 위에 고정됩니다. */
+            width: 100%; /* 가로폭을 꽉 채웁니다. */
+            display: flex;
+            justify-content: space-between;
+            background-color: #333;
+            z-index: 999; /* 다른 요소 위에 보이도록 설정합니다. 챗지피티 피셜 */ 
+            line-height: 10px;
+
+        }
+        .today-button input[type=button] {
+
+            width: 300px;
+            height: 40px;
+            font-size: 16px;
+
+            background-color: #84C639;
+            color: white;
+
+        }
+        .search-button input[type=search] {
+
+            width: 300px;
+            height: 40px;
+        
+        }
+        .button-red input[type=button] {
+
+            background-image: url("https://p.w3layouts.com/demos/july-2016/07-07-2016/grocery_store/web/images/img-sp.png");
+            width: 40px;
+            height: 40px;
+            margin-left: -165px;
+            background-color: #FA1818;
+
+        }
+        .view-button input[type=button] {
+
+            width: 130px;
+            height: 40px;
+            border: 1px solid #84c639;
+            background-color: #333;
+            color: white;
+            
+            
+        }
+        .button-contact input[type=button] {
+
+            background-color: #FA1818;
+            color: white;
+            height: 40px;
+            width: 200px;
+            font-size: 22px;
+
+        }
+        .store-image {
+
+            width: 300px;
+            height: 200px;
+
+        }
+        .grocery {
+
+            border: 1px solid red;
+            width: 200px;
+            
+            margin-left: 250px;
+            margin-top: 60px;
+            font-size: 18px;
+            color: red;
+
+        }
+        .store-logo {
+
+            border: 1px solid blue;
+            width: 200px;
+            height: 60px;
+            text-align: center;
+            font-size: 50px;
+            font-weight: bold;
+
+            margin-left: 230px;
+
+            display: inline-block;
+
+        }
+
+        .events {
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            position: relative;
+
+            bottom: 50px;
+            right: 100px;
+
+            border: 1px solid red;
+            /* color: white; */
+
+
+            
+
+        }
+        .events i {
+
+            margin: 0 40px;
+        }
+        /* .events > ul{
+            
+            color: white;
+
+        } */
+
+    </style>
+
+
+
+</head>
+<body>
+    
+    <div class="flexbox">
+        
+            <div class="today-button"><input type="button" value="Today's special Offers!"></div>
+            <div class="search-button"><input type="search" placeholder="Search a product..."></div>
+            <div class="button-red"><input type="button"></div> 
+            <div class="view-button"><input type="button" value="View Your Cart"></div>
+            <select>
+                <option></option>
+                <option>Login</option>
+                <option>Sign up</option>
+            </select>
+            <div class="button-contact"><input type="button" value="Contact Us"></div> 
+    </div>
+
+    <div class="grocery">GROCERY</div>
+
+    <div class="store-logo">STORE</div>
+
+
+
+    <div class="four-items">
+        <ul class="events">
+            <li>
+                <a href="#">Events</a>
+                    <i>/</i>
+            </li>
+        
+            <li>
+                <a href="#">About Us</a>
+                    <i>/</i>
+            </li>
+            <li>
+                <a href="#">Best Deals</a>
+                    <i>/</i>
+            </li>
+            <li>
+                <a href="#">Sevices</a>
+            </li>
+        </ul>
+    </div>
+
+    
+
+
+</body>
+</html>

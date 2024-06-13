@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- td나 th에 표현할 내용을 적는다 
+         td나 th는 tr의 자식요소여야 한다
+         tr은 table의 자식요소여야 한다    
+    -->
+    <table border="1">
+        <tr>
+            <th>제목 1</th>            
+            <th>제목 2</th>
+            <th>제목 3</th>
+        </tr>
+        <tr>
+            <td>제목보다 긴 글씨1</td>
+            <td>제목보다 긴 글씨2</td>
+            <td>제목보다 긴 글씨3</td>
+        </tr>
+        <tr>
+            <td>현준수</td>
+            <td>현준수</td>
+            <td>현준수</td>
+           
+        </tr>
+
+
+    </table>
+    
+
+    <table border="1">
+        <tr>
+            <th>제목 1</th>            
+            <th colspan="2">제목 2</th>
+            <!-- 콜스팬으로 두 칸을 합친다 -->
+        </tr>
+        <tr>
+            <td rowspan="2">제목보다 긴 글씨1</td>
+            <td>제목보다 긴 글씨2</td>
+            <td>제목보다 긴 글씨3</td>
+        </tr>
+        <tr>
+            <!-- 여기자리 없애야함 -->
+            <td>현준수</td>
+            <td>현준수</td>
+           
+        </tr>
+        <!-- colspan,rowspan 할때 
+             원본을 먼저 코딩하고 
+             합쳐질 것들 중 첫번째 칸에 속성을 넣고
+            필요 없어진 코드를 지운다 
+        -->
+
+
+    </table>
+
+    <table border="1">
+        <tr>
+            <th colspan="3"><a href="https://www.naver.com/" target="_blank">NAVER</a></th>            
+            <!-- <th>제목 2</th> -->
+            <!-- <th>제목 3</th> -->
+        </tr>
+        <tr>
+            <td>ID 로그인</td>
+            <td>일회용 번호</td>
+            <td>QR코드</td>
+        </tr>
+        <tr>
+            <td colspan="3">아이디</td>
+        </tr>
+        <tr>
+            <td colspan="3">비밀번호</td>
+        </tr>
+        <tr>
+                <td colspan="2">로그인 상태 유지 
+                <td>IP보안</td>
+        </tr>
+        
+        <tr>
+            <th colspan="3">로그인</th>
+        </tr>
+        <tr>
+            <td><a href="https://nid.naver.com/user2/help/pwInquiry?lang=ko_KR" target="_blank">비밀번호 찾기</a></td>
+            <td><a href="https://nid.naver.com/user2/help/idInquiry?lang=ko_KR" target="_blank">아이디찾기</a></td>
+            <td><a href="https://nid.naver.com/user2/join/agree?lang=ko_KR&realname=N" target="_blank">회원가입</a></td>
+        </tr>
+
+
+
+    </table>
+
+    <table border="1">
+        <caption>caption 테이블의 설명</caption>
+                <!-- summary 어떤 제목들로 이루어져 있는가 ? -->
+      
+        <thead>
+            <tr>
+                <td>제목1</td>
+                <td>제목2</td>
+            </tr>    
+        </thead>
+        <tbody>
+            <tr>
+                <td>내용1</td>
+                <td>내용2</td>    
+            </tr>
+        </tbody>        
+    </table>
+
+        
+         
+                    
+         <table border="1">        
+             <thead>
+                    <tr>
+                       <td>제목1</td>
+                       <td>제목2</td>
+                    </tr>    
+            </thead>
+                <tbody>
+                     <tr>
+                        <td>내용1</td>
+                        <td>내용2</td>    
+                    </tr>
+            </tbody>
+        </table>
+
+        <!-- 위에 다시 복습 해야겠음 -->
+
+        <table>
+            <tr>
+                <td> 
+                    <img 
+                        src="https://image-comtic.net/wf.jpg" 
+                        alt="신혼일기 표지 이미지"
+                        onerror="this.src='https://image-comic.pstatic.net/webtoon/808198/thumbnail/thumbnail_IMAG21_2aabb538-5b1a-4d74-81ed-b41bb8a155ff.jpg'"
+                        width="100"
+                        heigth="100"
+                        >
+                    <strong>신혼일기</strong>
+                    자까
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <img src="https://image-comic.pstatic.net/webtoon/808198/thumbnail/thumbnail_IMAG21_2aabb538-5b1a-4d74-81ed-b41bb8a155ff.jpg">
+                    <strong>촉법소년</strong>
+                    박만사,남자의 이야기/정종택
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <img src="">
+                    <strong>나노마신</strong>
+                    현절무/금강불괴/한중월야
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <img src="">
+                    <strong>소꿉친구 컴플렉스</strong>
+                    은하이
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <img src="">
+                    <strong>화산귀환</strong>
+                    LICO/비가
+                </td>
+            </tr>
+
+        
+
+        </table>
+
+        <table border="1">
+            <tr>
+                <th>N뉴스</th>
+                <td>연예</td>
+                <td>스포츠</td>
+                <td>날씨</td>
+                <td>프리미엄</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+            </tr>
+            <tr>
+                <td>언론사별</td>
+                <td>정치</td>
+                <td>경제</td>
+                <td colspan="7" style="text-align: right;">사회  생활&문화</td>
+            </tr>
+
+
+            
+        </table>
+
+        <table border="1">
+            <tr>
+                <th>N뉴스</th>
+                <td>연예</td>
+                <td>스포츠</td>
+                <td>날씨</td>
+                <td>프리미엄</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+            </tr>
+            <tr>
+                <td>언론사별</td>
+                <td>정치</td>
+                <td>경제</td>
+                <td colspan="5" style="text-align: left;">사회</td>
+                <td colspan="5" style="text-align: right;">생활&문화</td>
+            </tr>
+        </table>
+        
+        <table border="1">
+            <tr>
+                <th>N뉴스</th>
+                <td>연예</td>
+                <td>스포츠</td>
+                <td>날씨</td>
+                <td>프리미엄</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+                <td>현준수</td>
+            </tr>
+            <tr>
+                <td>언론사별</td>
+                <td>정치</td>
+                <td>경제</td>
+                <td colspan="6" style="text-align: left;">사회</td>
+                <td colspan="4" style="text-align: right;">생활&문화</td>
+            </tr>
+        </table>
+        
+        
+        
+        
+        
+        
+          
+          
+            
+
+
+
+
+
+        
+
+
+   
+
+</body>
+</html>

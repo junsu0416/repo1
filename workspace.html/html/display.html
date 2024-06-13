@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+            /* 
+            좌우 전체 너비를 가진다
+            그래서 새로운 줄에 표시된다
+            너비가 전체 크기보다 작은 경우 나머지 공간에 정렬할 수 있다
+            예를 들어 한 줄이 모두 내 땅이고 너비만큼의 건물이 있는 것처럼 
+            */
+        .block{
+            width: 200px;
+            border: 1px solid red;
+            margin : 0 auto;
+        }
+            /* inline은 딱 내 컨텐츠만큼의 너비를 가진다 */
+        .inline{
+            border : 1px solid red;
+
+            /* inline은 width,height 적용 안됨 */
+        
+            width : 200px;
+            height : 200px;
+
+            /*  margin 좌우는 되지만 위아래는 적용 안됨 */
+            margin : 50px;
+
+            /* padding 좌우는 되지만 위아래는 적용 안됨 단, border는 밀어짐 */
+            /* padding : 30px; */
+        }
+
+        .bg_blue{
+            background-color: blue;
+            color : white;
+        }
+
+        .parent > div {
+            border: 1px dotted rgb(0,0,225);
+            width: 400px;
+            height: 200px;
+
+            display: inline-block;
+            /* inline에 block의 장점인 부피감을 더한 것
+            */
+
+            vertical-align: top;
+            /* 새로방향 정렬인데 inline or inline-block일떄만 적용됨  */
+        }
+
+        div.parent #c2 {
+            
+            height: 400px;
+        }
+
+        .parent {
+            border: 1px dotted #ff00ff;
+            width: 500px;
+
+        }
+
+        #c1 {
+            /* display: none; = 화면에 안 보이는 */
+            /* visibility: hidden; = 안 보이지만 공간이 있음  */
+            /* 차이는 공간이 있느냐 없느냐 차이 */
+            opacity: 1;
+
+        }
+
+        /* #c1:hover { 
+            background-color: red;
+            opacity: 0;
+        } */
+
+        .fake_div {
+            border: 1px dotted #ff00ff;
+            display : inline;
+        }
+        
+
+    </style>
+
+</head>
+<body>
+    <p class="block">
+        첫번째 p
+    </p>
+    <p class="block">
+        두번째 p 
+    </p>
+    <a href=#a class="inline">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsum, dicta quas ratione culpa aliquam totam blanditiis illum, voluptate sint beatae suscipit id quisquam, nulla minus dolore sit placeat vero!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita eveniet magni necessitatibus. Eligendi inventore quidem ipsum! Sint voluptate tenetur nihil eius molestias beatae adipisci nemo debitis hic voluptas, quisquam sed!
+    </a>
+    <a href=#a class="inline">
+        두번째 a
+    </a>
+    <br>
+    <span class="bg_blue">첫번째 span</span>
+    <span class="bg_blue">두번재 span</span>
+    <br>
+    <span class="bg_blue">첫번째 span</span><span class="bg_blue">두번재 span</span>
+    
+    <hr>
+
+    <div class="parent">
+        <div id="c1">목록1</div>
+        <div id="c2">
+            목록2<br>
+            목록2에 대한 설명
+        </div>
+    </div>
+
+    <div class="fake_div">div이었던거</div>
+    <div class="fake_div">div이었던거</div>
+    
+
+</body>
+</html>

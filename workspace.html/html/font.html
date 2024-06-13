@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        /*
+        webfont 다운로드 
+        font-family에 적힌 글씨로 사용가능 
+        */
+    @font-face {
+    font-family: 'intelone-mono-font-family-regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/intelone-mono-font-family-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    }
+
+        .size {
+            font-size: 32px;
+            /* font-size: 2em; font-size: 200%; */ 
+            /* 다 똑같다  */
+
+        }
+
+        .webfont {
+            font-family: 'intelone-mono-font-family-regular';
+            color: red;
+        }
+        .webfont div {
+            font-family: "Courier New";
+        }
+        div.weight .fw-100 {
+            font-weight: 100;
+        }
+        div.weight .fw-500 {
+            font-weight: 500;
+        }
+        div.weight .fw-900 {
+            font-weight: 900;
+        }
+        /* 100-900까지 벗어나면 기본 두께 */
+        div.weight .fw-2000 {
+            font-weight: 2000;
+        }
+        
+        .height {
+            line-height: 200%;
+        }
+
+        .height2 {
+            border : 1px solid black;
+            width : 80px;
+            height : 100px;
+
+            line-height: 100px; 
+            /* 
+            줄간격을 조절하는 css인데 글씨가 중앙 나오는 특성을 이용해서 
+            부모와 같은 크기를 주면 수직방향 중앙 정렬됨 
+            */
+        }
+
+        .center {
+            text-align: center;
+        }
+        .right {
+            text-align: right;
+        }
+        .underline {
+            text-decoration : underline;
+        }
+        .through {
+            text-decoration: line-through;
+        }
+        [type="checkbox"]:checked + span {
+            text-decoration: line-through;
+        }
+        .text {
+            border: 1px solid red;
+            width : 200px;
+
+        }
+        .text.nowrap {
+            /* 
+                inline요소를 자동 줄바꿈 하지 않는다.
+                케러셀 등에서 쓰인다.
+            */
+            white-space: nowrap;
+
+            /*
+                overflow로 가려진 글씨가 있을때
+                ...을 붙여준다.
+            */
+            text-overflow: ellipsis;
+            overflow: hidden;
+
+        }
+        .word-wrap {
+            /*
+                원래 한 단어로 인식하는 경우 넘쳐도 자동 줄바꿈이 되지 않음
+                break-word 적용시 너비를 벗어나지 않게 자동 줄바꿈 해줌 
+                원래 자동 줄바꿈 되는 게 유지됨.
+            */
+            word-wrap : break-word;
+        }
+        .word-break {
+            /*
+                word-wrap : break-word랑 비슷한데
+                원래 자동 줄바꿈 대상을 무시한다.
+            */
+            word-break : break-all;
+        }
+
+
+    </style>
+</head>
+<body>
+    <h1>h1</h1>
+    <span class="size"><strong>h1</strong>-fake</span>
+
+    <div class="webfont">
+        글씨를 좀 적습니다. 졸려요 ㅠ3ㅠ
+        <div>
+            안쪽 div
+        </div>
+    </div>
+    <div class="weight">
+        <div class="fw-100">100</div>
+        <div class="fw-500">500</div>
+        <div class="fw-900">900</div>
+        <div class="fw-2000">2000</div>
+    </div>
+    <div class="height">
+        첫번째 줄<br>
+        두번째 줄
+    </div>
+    <div class="height2">
+        read more
+    </div>
+    <h1 class="center">
+        가운데 정렬
+    </h1>
+    <h2 class="right">
+        오른쪽 정렬
+    </h2>
+    <div style="text-align: center;">
+    <a href="#">a링크</a>
+    </div>
+    <div>
+        <span class="underline">underline</span>
+        <span class="through">line-through</span>
+    </div>
+    <div>
+        <input type="checkbox"> <span>오저뭐 ?</span><br>
+        <input type="checkbox"> <span>복습</span><br>
+        <input type="checkbox"> <span>게임 한 판</span>
+    </div>
+
+    <div class="text">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam sit id odio distinctio alias iste veritatis voluptas numquam quidem quis, fugiat hic quasi! Maxime facilis obcaecati natus pariatur laborum sit.
+    </div>
+
+    <!-- 타이틀에 적어놓으면 오버플로어 히든으로 감춰놨던 글씨를 전달 할 수 있다. -->
+    <div class="text nowrap" title="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam sit id odio distinctio alias iste veritatis voluptas numquam quidem quis, fugiat hic quasi! Maxime facilis obcaecati natus pariatur laborum sit.">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam sit id odio distinctio alias iste veritatis voluptas numquam quidem quis, fugiat hic quasi! Maxime facilis obcaecati natus pariatur laborum sit.
+    </div>
+
+    <div class="text word-wrap">
+        asdkaoskdoaksodkaoskdoasodkaoskdoaksodaksodkoa asodkaskdwmqemqwmdugdsaihweqnwjodasiobijaijjoiasdi
+    </div>
+
+    <div class="text word-break">
+        asdkaoskdoaksodkaoskdoasodkaoskdoaksodaksodkoa asodkaskdwmqemqwmdugdsaihweqnwjodasiobijaijjoiasdi
+    </div>
+</body>
+</html>
