@@ -259,6 +259,30 @@
                 }
             });
 
+
+            document.querySelector("#btn4").addEventListener("click",function(){
+               let chks = document.querySelectorAll('.chk');
+               // for(let i = 0; ...)
+               // for(let index in ...)
+               // for(let item of ...)
+               // 배열.forEach(function(item){} )
+            //    chk[0].value;
+
+                for( let dom of chks){
+                    // dom = chks[0]
+                    // 모든 요소의 (프로퍼티 property 중에서) 체크상태 점검
+                    if(dom.checked /* == true */){
+                        console.log(dom.value , dom.checked);
+                    }
+                }
+
+                // css 선택자를 이용해서 체크된 것만 가져오기 
+                let chks2 = document.querySelectorAll('.chk : checked');
+                console.log(chks2.length);
+
+            })
+
+
         }
 
 
@@ -296,6 +320,22 @@
         <input id = "keyword" type = "text" name = "query">
         <input type = "submit" value = "네이버 검색">
     </form>
+
+
+    <input type="button" id="btn4" value="토핑확인"><br>
+    <input type = "checkbox" class="chk" value="udon">우동사리<br>
+    <input type = "checkbox" class="chk" value="cake">떡
+
+    <label><input type="checkbox" id="bun" class="chk" value="china">중국당면</label>
+
+    <input type="checkbox" id="bun" class="chk" value="china">
+    <label for="bun">분모자</label>
+
+    <div>
+        
+    </div>
+
+
 
 </body>
 
