@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+
+        function cal(func, num) {
+            return func(num);
+        }
+        function increase(num) {
+            return num + 1;
+        }
+        function decrease(num) {
+            return num - 1;
+        }
+        console.log(cal(increase, 1));
+        console.log(cal(decrease, 1));
+
+        var process = [
+            function (input) { return input + 10; },
+            function (input) { return input * input; },
+            function (input) { return input / 2; }
+        ];
+        var input = 1;
+        for (var i = 0; i < process.length; i++) {
+            input = process[i](input);
+        }
+        console.log(input);
+
+        ////////////////////////////////////////////
+        // 동기적 처리 
+        // ex ) 글을 작성 - 만약 만 명한테 보내야하는 상황 
+        // - 보내는데 시간은 약 한 명당 1초라면 10000초 약 2~3시간 
+        // - 그렇다면 그런 서비스를 사용하겠는가 
+        // 동기식 처리는 일을 순차적으로 처리하며, 각 작업이 완료될 때까지 기다리는 방식입니다. 이는 요리사가 요리를 만들 때 요리가 완성될 때까지 기다리는 것과 유사합니다.
+        ////////////////////////////////////////////
+
+        /////////////////////////////////////////////
+        // 비동기식 처리
+        // 비동기식 처리는 일을 요청하고 결과를 기다리지 않고 다른 작업을 처리할 수 있는 방식입니다.  
+        // 이는 요리사가 요리를 만들 때 요리가 완성될 때까지 기다리지 않고 다른 요리를 준비하거나 다른 손님에게 주문을 받는 것과 유사합니다.
+        //////////////////////////////////////////////
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
