@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    // window.addEventListener("load",function(){
+    // 이렇게 쓰는 게 좋다 
+    // })
+    // 아래의 window.onload 는 하나에만 동작 ...... 나중에 동작 안 할수도 있음 
+
+    window.onload = function () {
+
+        let chk = document.querySelector('#chk');
+        chk.addEventListener('click', function (event) {
+
+            // event.target , event.currentTarget , this 
+            // 모두 같은 DOM
+
+            if (event.target.checked) {
+            // 체크박스를 눌렀을 때 다시 취소했을 때에 변환 
+
+
+                let name_1 = document.querySelector('#name_1')
+                let num_1 = document.querySelector('#num_1')
+                let adress_1 = document.querySelector('#adress_1')
+                let name_2 = document.querySelector('#name_2')
+                let num_2 = document.querySelector('#num_2')
+                let adress_2 = document.querySelector('#adress_2')
+                // 각자의 값을 옮기기 위한 
+
+                name_2.value = name_1.value;
+                num_2.value = num_1.value;
+                adress_2.value = adress_1.value;
+                // 값 옮기기 
+
+            } else {
+
+                name_2.value = "";
+                num_2.value = "";
+                adress_2.value = "";
+                // 아니라면 값을 없앰 
+
+            }
+
+        })
+
+
+    }
+
+</script>
+
+<body>
+
+    <div class="div1">
+        <h1>주문정보</h1>
+        이름 : <input type="text" name="이름" id="name_1"><br>
+        연락처 : <input type="text" name="연락처" id="num_1"><br>
+        주소 : <input type="text" name="주소" id="adress_1"><br>
+    </div>
+    <div class="div2">
+        <h1>배송정보</h1>
+        <input type="checkbox" id="chk">주문 정보와 배송 정보가 같습니다.
+        <br>
+        이름 : <input type="text" name="이름" id="name_2"><br>
+        연락처 : <input type="text" name="연락처" id="num_2"><br>
+        주소 : <input type="text" name="주소" id="adress_2"><br>
+    </div>
+
+</body>
+
+</html>

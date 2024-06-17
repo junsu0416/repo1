@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        #color{
+            border: 1px solid red;
+            width: 300px;
+            height: 100px;
+        }
+
+        .red {
+            background-color: red;
+        }
+        .green {
+            background-color: green;
+        }
+        .blue {
+            background-color: blue;
+        }
+        .yellow {
+            background-color: yellow;
+        }
+
+    </style>
+
+    <script>
+        window.addEventListener('load', function(){
+            time();
+
+            age();
+
+            document.querySelector('#red').addEventListener('click',function(event){
+                let color = document.querySelector('#color');
+
+                color.classList.remove("red");
+                color.classList.remove("green");
+                color.classList.remove("blue");
+                color.classList.remove("yellow");
+
+                color.classList.add("red");
+                
+            })
+
+            document.querySelector('#green').addEventListener('click',function(event){
+                let color = document.querySelector('#color');
+
+                color.classList.remove("red");
+                color.classList.remove("green");
+                color.classList.remove("blue");
+                color.classList.remove("yellow");
+
+                color.classList.add("green");
+                
+            })
+
+            document.querySelector('#blue').addEventListener('click',function(event){
+                let color = document.querySelector('#color');
+
+                color.classList.remove("red");
+                color.classList.remove("green");
+                color.classList.remove("blue");
+                color.classList.remove("yellow");
+
+                color.classList.add("blue");
+                
+            })
+
+            document.querySelector('#yellow').addEventListener('click',function(event){
+                let color = document.querySelector('#color');
+
+                color.classList.remove("red");
+                color.classList.remove("green");
+                color.classList.remove("blue");
+                color.classList.remove("yellow");
+
+                color.classList.add("yellow");
+                
+            })
+
+
+            
+
+
+        })
+        function time() {
+                let time = document.querySelector("#time");
+                // time은 div이고 그 안에 컨텐츠 영역에 글씨 쓰기
+                time.textContent = 'textContent';
+                time.innerText = 'innerText';
+                time.innerHTML = 'innerHTML';
+
+                time.innerText ='시 : 분 : 초';
+
+                let now = new Date();
+                let h = now.getHours();
+                let m = now.getMinutes();
+                let s = now.getSeconds();
+
+                let hms = h +"시" + m + "분" + s + "초";
+                time.innerText = hms;
+
+                // now.toISOString().split("T")[1]
+                // 실시간 ( 1초에 4번 ) 갱신
+
+                setInterval(function(){ 
+                    let now = new Date();
+                let h = now.getHours();
+                let m = now.getMinutes();
+                let s = now.getSeconds();
+
+                
+                let s1;
+                if(s < 10) {
+                    s1 = '0' + s
+                } else {
+                    s1 = s
+                }
+                // 초가 1 초 일때 표기를 01, 02, 03 ... 이런식으로 표기할 수 있게 
+
+
+                
+                
+
+                let hms1 = h +"시" + m + "분" + s1 + "초";
+                hms1 += now.getFullYear()+ "년"
+                time.innerText = hms1;
+
+                } , 1000 / 4)
+
+            }   
+            function age(){
+                document.querySelector("#calc").addEventListener("click",function(){
+                    let year = document.querySelector("#year").value;
+                    document.querySelector("#age").textContent = new Date().getFullYear() - year + 1;
+                    
+                })
+            }
+
+
+
+    </script>
+</head>
+<body>
+
+    <div id="color">
+    </div>
+    <div>
+        <input type="button" id="red" value="빨강">
+        <input type="button" id="green" value="초록">
+        <input type="button" id="blue" value="파랑">
+        <input type="button" id="yellow" value="노랑">
+    </div>
+
+    <div>
+        <h2>실습4</h2>
+        <div id="time"></div>
+    </div>
+    <div>
+        <h2>실습5</h2>
+        <div>
+            출생년도(예 : 2001)<input type="text" id="year">
+            <input type="button" id="calc" value="나이계산">
+        </div>
+        <div id="age"></div>
+        <div id="time"></div>
+    </div>
+
+</body>
+</html>

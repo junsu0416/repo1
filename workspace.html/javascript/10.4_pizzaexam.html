@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+
+        window.addEventListener('load', function () {
+
+            pizza();
+
+            function pizza() {
+                document.querySelector('#order').addEventListener('click', function () {
+
+                    // 주문 총 금액 
+                    let total_price = 0;
+                    let total_text = "";
+
+
+                    // select (피자 종류)
+                    let type = document.querySelector("#type");
+                    // 선택된 option의 value 구하기
+                    // console.log(type.value)
+                    let type_value = type.value;
+                    total_price += Number(type_value);
+
+                    //select의 선택된 option 가져오기
+                    let type_text = document.querySelector("#type option:checked").innerText
+                    total_text += "피자종류 : " + type_text + ","
+                    // console.log(type_text);
+                    //////////////////////////////////////// 종류 //////
+
+                    // 사이즈 선택
+                    let size = document.querySelector("[name=size]:checked");
+                    total_price += Number(size.value);
+
+                    // console.log(size.value , total_price)
+
+                    // css 선택자로 글씨 span 가져오기
+                    // console.log(document.querySelector("[name=size]:checked + span").textContent);
+
+                    // 부모로 올라갔다가 span으로 내려오기 
+                    // console.log (size.parentNode.querySelector("span").innerText);
+
+                    // 같은 속성 값을 가진다는 아이디어로 가져오기 
+                    // console.log( document.querySelector("label[for=" + size.getAttribute("id") + "]").innerText );
+
+                    // console.log(size.getAttribute("data-name"));
+                    total_text += "사이즈 : " + size.getAttribute("data-name") + ",";
+
+                    // console.log(total_text)
+
+                    total_text += "토핑 : "
+                    let list_topping = document.querySelectorAll('.topping:checked');
+                    for (let i = 0; i < list_topping, length; i++) {
+                        total_price += Number(list_topping[i].value);
+                        total_text += list_topping[i].getAttribute("data-topping") + ",";
+                    }
+
+                    total_text += "요청사항 : " + document.querySelector("#request").value;
+
+                    console.log("주문내역 : " + total_text);
+                    console.log("총가격 : " + total_price);
+
+
+
+                })
+            }
+
+            // let lott = [];
+
+            // let tmp = parseInt(Math.random() * 45) + 1;
+            // console.log(tmp)
+            // lotto.push(tmp);
+
+            // do {
+            //     tmp = parseInt(Math.random() * 45) + 1;
+            //     console.log('tmp', tpm)
+            // } while (lotto[0] != tmp);
+            // lotto.push(tmp);
+
+            // do {
+            //     tmp = parseInt(Math.random() * 45) + 1;
+            //     console.log('tmp1', tpm)
+            // } while (lotto[0] == tmp);
+            // lotto.push(tmp);
+            // console.log(lotto)
+
+            // do {
+            //     let tmp = parseInt(Math.random() * 45) + 1;
+            //     console.log('tmp2', tpm)
+            // } while (lotto[0] == tmp || lotto[1] == tmp);
+            // lotto.push(tmp);
+            // console.log(lotto)
+
+            lotto = [];
+            lotto_array = [];
+
+
+
+            // 지정한 자리를 제외하고 자동 뽑기 
+            // ex) 1. 처음은 6 , 다음 8 고정하고 나머지 자동 선택 
+            //     2. 두번째 5넣고 네번째 30 다섯번째 35 고정 나머지 자동 
+
+            document.querySelector("#lottobutton").addEventListener("click", function () {
+                // console.log("#lottobutton")  
+
+                lotto = [];
+                // 배열을 누를때마다 초기화
+                let fixedPosition = parseInt(document.getElementById('fixed_position').value);
+
+                if(!isNaN(fixedPosition) && fixedPosition >= 1 && fixedPosition <=6 ){
+                    for(let i = 0; i < 6; i++){
+                        if(i + 1 === fixedPosition){
+                            let fixedNumber = parseInt(prompt("고정할 숫자를 정하세요(1~45 사이의 숫자)"))
+                            if(!isNaN(fixedNumber) && fixedNumber >= 1 && fixedNumber <= 45 ){
+                                lotto.push(fixedNumber);
+                            } else {
+                                alert("올바른 숫자를 입력하세요")
+                                return;
+                            }
+                        } else {
+                            // 나머지 자리 랜덤 선택
+                            let randomNum;
+                            do {
+                                randomNum = parseInt(Math.random() * 45) + 1;
+                            } while (lotto.includes(randomNum));
+                            lotto.push(randomNum);
+                        }
+                    }
+
+                    console.log(lotto);
+                    // 결과를 화면에 표시하거나 다른 처리를 할 수 있음
+                    document.getElementById('lotto_text').value = lotto.join(', '); // 예시로 숫자들을 텍스트 필드에 표시
+                } else {
+                    alert('고정할 자리 번호를 1에서 6 사이의 숫자로 입력하세요.');
+                }
+            });
+        }); 
+
+            
+                
+            
+
+    </script>
+
+</head>
+
+<body>
+
+    <div>
+        <h1>피자 주문</h1>
+        피자종류 :
+        <select id="type">
+            <option value="15000">불고기 피자(+15000)</option>
+            <option value="20000">포테이토 피자(+20000)</option>
+            <option value="25000">페퍼로니 피자(+25000)</option>
+        </select>
+        <br>
+
+        <input type="radio" name="size" value="0" data-name="미디엄"><span>미디엄</span>
+        <label>
+            <input type="radio" name="size" checked="checked" value="3000" data-name="라지"><span>라지(+3000)</span>
+        </label>
+
+        <input type="radio" name="size" id="fam" value="6000" data-name="패밀리">
+        <liber for="fam">패밀리(+6000)</liber>
+        <br>
+
+        토핑 :
+        <input type="checkbox" class="topping" value="1000" data-topping="페퍼로니">페퍼로니(+1000)
+        <input type="checkbox" class="topping" value="2000" data-topping="베이컨">베이컨(+2000)
+        <input type="checkbox" class="topping" value="3000" data-topping="새우">새우(+3000)
+        <br>
+
+        요청사항 :
+        <input type="text" id="request" placeholder="요청사항 입력">
+        <br>
+
+
+        <input type="button" value="주문하기" id="order">
+
+
+
+    </div>
+
+
+
+    <div>로또</div>
+    <label for="fixed_position">고정할 자리 번호 (1부터 6까지):</label>
+    <input type="number" id="fixed_position" min="1" max="6">
+    <br><br>
+    <input type="text" id="lotto_text">
+    <input type="button" id="lottobutton" value="추첨">
+
+    <!-- <script>
+        window.addEventListener('load', function () {
+            let lotto = [];
+
+            // 버튼 클릭 시 이벤트 처리
+            document.querySelector("#lottobutton").addEventListener("click", function () {
+                lotto = []; // 추첨할 때마다 초기화
+
+                let fixedPosition = parseInt(document.getElementById('fixed_position').value);
+
+                // 유효성 검사: 입력값이 숫자이고 1에서 6 사이의 값인지 확인
+                if (!isNaN(fixedPosition) && fixedPosition >= 1 && fixedPosition <= 6) {
+                    // 사용자가 고정할 자리를 제외한 나머지 자리 랜덤 선택
+                    for (let i = 0; i < 6; i++) {
+                        if (i + 1 === fixedPosition) {
+                            // 사용자가 선택한 자리는 고정 숫자로 설정
+                            let fixedNumber = parseInt(prompt(`고정할 숫자를 입력하세요 (1에서 45 사이의 숫자)`));
+                            if (!isNaN(fixedNumber) && fixedNumber >= 1 && fixedNumber <= 45) {
+                                lotto.push(fixedNumber);
+                            } else {
+                                alert('올바른 숫자를 입력하세요 (1에서 45 사이의 숫자)');
+                                return;
+                            }
+                        } else {
+                            // 나머지 자리 랜덤 선택
+                            let randomNum;
+                            do {
+                                randomNum = parseInt(Math.random() * 45) + 1;
+                            } while (lotto.includes(randomNum));
+                            lotto.push(randomNum);
+                        }
+                    }
+
+                    console.log(lotto);
+                    // 결과를 화면에 표시하거나 다른 처리를 할 수 있음
+                    document.getElementById('lotto_text').value = lotto.join(', '); // 예시로 숫자들을 텍스트 필드에 표시
+                } else {
+                    alert('고정할 자리 번호를 1에서 6 사이의 숫자로 입력하세요.');
+                }
+            });
+        }); -->
+
+
+
+</body>
+
+</html>

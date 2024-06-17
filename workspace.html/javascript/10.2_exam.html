@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #spon {
+            width: 300px;
+            height: 300px;
+        }
+
+        #star {
+            width: 300px;
+            height: 300px;
+        }
+
+        #sq {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+    <script>
+
+        window.addEventListener('load', function () {
+
+            document.querySelector("#thumbnail").addEventListener("click",function(){
+                let img_main = document.querySelector("#img_main")
+                img_main.setAttribute('src',event.target.getAttribute("src"));
+            })
+
+            
+        })
+
+        
+
+    </script>
+</head>
+
+<body>
+
+
+    <div>
+        <img id="img_main" src="" alt="">
+    </div>
+
+    <div id="thumbnail">
+        <div>
+            <img id="spon" src="https://downloadwap.com/thumbs2/wallpapers/p2ls/2019/patterns/45/73f0ca7b13473856.jpg">
+        </div>
+        <div>
+            <img id="star" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF11EtJZNwEeEvwTW8KVZlPyPCqBU2mkLW3A&s">
+        </div>
+            <img id="sq" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTsYc2_KPUBEQDhbBAV1kVU764rPMXKUKFjA&s">
+        </div>    
+    </div>
+  
+    
+    
+</body>
+
+</html>
