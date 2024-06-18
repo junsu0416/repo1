@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+
+        window.addEventListener("load", function () {
+
+            document.querySelector("#btn").addEventListener("click", function () {
+
+                doAjax();
+
+            });
+
+            document.querySelector("#btn2").addEventListener("click", function () {
+
+                doAjaxPoiema();
+            })    
+
+        });
+
+            function doAjaxPoiema() {
+                // ajax 객체 생성
+                let xhr = new XMLHttpRequest();
+
+                // 보낼 준비
+                xhr.open('get', 'https://poiemaweb.com/js-ajax');
+
+                // 보내기 (단 , 언제 끝날지 모름)
+                xhr.send();
+
+                // 다녀온 후 ( 응답 이후 ) onload 를 써서 언제 다녀온지 알 수 있다 
+                xhr.onload = function () {    // load 이벤트가 되고 저장되는 변수에 저장 
+                    console.log("다녀왔습니다");
+
+                    // 받아온 내용이 저장되는 변수 
+                    let text = xhr.responseText;
+                    console.log(text);
+
+                    // 받아온 글씨를 json객체로 변경
+                    // let data = JSON.parse(text);
+                    // console.log(data);
+
+                    // console.log(data[0].username);
+
+                    // html로 된 글씨를 받아온 경우 
+                    // dom으로 바꿔서 필요한 정보를 얻어보자 
+                    let doc = new DOMParser().parseFromString(text, 'text/html');
+                    let html = doc.getElementById("32-ajax-response").innerHTML;
+                    console.log(html);
+
+                }
+
+            }
+
+    </script>
+</head>
+
+<body>
+    <button type="button" id="btn">ajax실행</button>
+    <button type="button" id="btn2">Poiema</button>
+</body>
+
+</html>
