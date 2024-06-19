@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script>
+        // jQuery(); $랑 같은 의미의 함수 
+        $(function(){
+            // 페이지 로딩이 끝나면 실행됨 ex) window.onload 와 같은 의미 
+            bind();
+            init();
+            
+        });
+
+        function init(){
+            // $() 함수에 전달인자로 글씨를 주게되면 css 선택자로 인식합니다 
+            // 만약 그 글씨가 tag라면 createElement 해줌 
+            let list_h1 = $("h1");
+            
+            console.log(list_h1);  
+            // jQuery.fn.init {0: h1, 1: h1, 2: h1, length: 3, prevObject: j…y.fn.init} 이런 상태의 배열 객체로 출력
+            console.log(list_h1[0]);
+            // 순수한 javaScript    ---------- QuerySelectorAll 처럼 전부 다 배열로 리턴
+
+            // querySelectorAll로 가져온 배열을 반복하면서 
+            // innerText = "hello"를 실행한 것과 같다 
+            // let _list_h1 = document.querySelectorAll("h1")
+            // for(let i = 0; i < _list_h1.length; i++ ){
+            //     _list_h1[i].innerText = "hello";
+            // }
+            // ------- 위 코드를 jQuery 로 변경한 결과--------
+            $("h1").html("<a href='javascript:void(0)'>hello</a>");  // h1이란 글씨를 전부 hello 로 변경
+            // text함수는 innerText             // 보통 href= # 을 쓰는데 오류가 날 수도 있으니 href='javascript:void(0)'이렇게 쓰는게 좋다 
+            // $("h1").text("hello")
+            // html함수는 innerHTML
+            
+            console.log($("#parent"));  // 하나짜리 배열로 나온다 
+
+            $("#parent").append("<div>자식2</div>");
+            $("#parent").prepend("<div>자식3</div>");
+            $("#parent").append($("h1")[0]);
+
+
+            // jS식으로 쓴다면 $("#parent")[0].innerHTML = "";
+            // $("#parent").html(""); // 뭔가를 지울때 밑에랑 같은 효과    
+            $("#parent").empty();       // 자식요소를 없앨 때 
+
+            // $("#parent")[0].remove()
+            $("#parent").remove();  // ex ) parent 라는 돔을 지우고싶을떄 
+
+            $("#chk").addClass("c1");
+            $("#chk").addClass("c1");
+            $("#chk").addClass("c2");
+            $("#chk").removeClass("c2");
+            $("#chk").toggleClass("c2");
+
+            if($("#chk").hasClass("c1")){
+                console.log("c1 있음");
+                $("#chk").removeClass("c1");
+            } else {
+                $("#chk").addClass("c1");
+            }
+
+            // 속성 조작
+            // attr 
+            // 전달인자가 하나인 경우 : getAttribute
+            // 전달인자가 두개인 경우 : setAttribute
+            // 위 방식은 JS식 
+            // ---------------------------------
+            console.log($("#chk").attr('data-human'));
+            $("#chk").attr('data-human','값2'); // data-human 의 값은 '값'인데 '값2'로 변경 
+            $("#chk").removeAttr("data-human"); // data-human 이라는 속성을 지우기 
+
+            // check가 돼 있는 상태인지 확인 | JS식으로는 DOM.checked
+            console.log($("#chk").prop("checked"));
+            $("#chk").prop("checked" , false); // checked 상태를 false로 풀기 
+
+            // console.log($("#input")[0].value) JS식으로 
+            console.log($("#input").val()) // form 요소의 값을 가지고 오는 방법
+            $("#input").val("바꾼값");
+
+            $("#input").css("border", "1px solid red"); // CSS 적용 방법 
+            // show : display none 을 해줌
+            // hide : display none 을 풀어줌 
+            // removeEventlistenner 와 .off 와 같음 
+            // addEventlistenner 와 on 과 같음 
+            
+            // display : none;
+            $("#input").hide();
+
+            // display 보이기
+            $("#input").show();
+
+            // 자식요소 중에서 찾기
+            $("#parent").find(".c");
+
+            // 부모로 올라가기 - JS 에서 parentNode 같은 
+            $("#parent").parent();
+
+            // css 선택자 조상 중에 가장 가까운 것을 찾기
+            $("#parent").parents("body");
+
+            $("#btn1").trigger("click"); // click 버튼을 누르기 전에 load 하자마자 바로 눌리게끔 
+            
+        }
+
+        function bind(){
+
+            $(".btn").on("click" , function(event){
+                // console.log(event.target);
+                console.log(this); // 위와 동일한 결과 
+                    // function 안에는 JS식과 동일함 
+            }); 
+            $(".btn").off("click").on("click" , function(event){
+                // 위에서 나온 이벤트를 취소해주려면 .off("click")을 넣어주면 중복이 안 되고 , 하나 지우고 지금은 클릭이지만 이벤트를 다시 넣어서 실행할 수 있음 
+                console.log(this);  // click 뒤 .a , .b 를 적어주면 원하는 것만 지울 수도 있음 
+                    
+            }); 
+            
+
+
+        }
+
+    </script>
+</head>
+<body>
+    <h1>첫번째</h1>
+    <h1>두번째</h1>
+    <h1>세번째</h1>
+    <div id="parent">
+        부모
+        <div class="c">자식</div>
+    </div>
+    
+    <input type="checkbox" id="chk" value="val1" data-human="값" checked="checked">
+    <br>
+    <input type="text" id="input" value="미리완성">
+    <br>
+    <input type="button" class="btn" id="btn1" value="버튼1">
+    <input type="button" class="btn" value="버튼2">
+
+</body>
+</html>

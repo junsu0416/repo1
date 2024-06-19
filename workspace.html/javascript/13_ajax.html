@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script>
 
         window.addEventListener("load", function () {
@@ -19,43 +19,119 @@
             document.querySelector("#btn2").addEventListener("click", function () {
 
                 doAjaxPoiema();
-            })    
+            })
+
+            // --------------------------jQurey------------------------------------------------
+            $("#btn3").off("click").on("click", function () {    // jQurey에 ajax 적용
+                // console.log("btn3")
+                let option = {
+                    "url": 'https://poiemaweb.com/js-ajax', // url 작성하고 get , post 등 적기 
+                    "type": "get",
+                    "success": function (data) {
+                        // 다녀오는 걸 성공 했을 때 실행
+                        console.log('성공')
+                        console.log(data);
+                    },
+                    "error" : function (data2) {
+                        // 다녀오는게 실패했다면 실행 
+                        console.log('실패')
+                        console.log(data);
+                    },
+                    "complete": function(data){
+                        // 성공 여부에 관계없이 무조건 마지막에 실행 
+                        console.log('complete');
+                        console.log(data);
+                    }
+                };
+                $.ajax(option);
+            })
+            $("#btn4").off("click").on("click", function () {
+                let option = {
+                "url": 'https://poiemaweb.com/js-ajax', // url 작성하고 get , post 등 적기 
+                    "type": "get"
+                }
+
+                
+                // 위와 같은 방법을 다르게 해석 .done , fail, always
+                $.ajax(option)
+                .done(function(data){
+                    // json에 success 키에 지정하는 것과 같음 
+                    // 다녀오는 걸 성공 했을 때 실행
+                     console.log('성공')
+                        console.log(data);
+                }).fail( function (data2) {
+                    // json에 error 키에 지정하는 것과 같음 
+                    // 다녀오는게 실패했다면 실행 
+                        console.log('실패')
+                        console.log(data);
+                }).always(function(data){
+                    // json에 complete 키에 지정하는 것과 같음 
+                    // 성공 여부에 관계없이 무조건 마지막에 실행 
+                        console.log('complete');
+                        console.log(data);
+                });
 
         });
 
-            function doAjaxPoiema() {
-                // ajax 객체 생성
-                let xhr = new XMLHttpRequest();
 
-                // 보낼 준비
-                xhr.open('get', 'https://poiemaweb.com/js-ajax');
+        function doAjax() {             // ajax 객체 생성             
+            let xhr = new XMLHttpRequest();              // 보낼준비            
+            xhr.open('GET', 'https://jsonplaceholder.typicode.com/users');
 
-                // 보내기 (단 , 언제 끝날지 모름)
-                xhr.send();
+            // 보내기(단, 언제 끝날지 모름)             
+            xhr.send();
 
-                // 다녀온 후 ( 응답 이후 ) onload 를 써서 언제 다녀온지 알 수 있다 
-                xhr.onload = function () {    // load 이벤트가 되고 저장되는 변수에 저장 
-                    console.log("다녀왔습니다");
+            // 그래서 onload를 써서 응답 이후 함수를 실행한다.             
+            xhr.onload = function () {
+                console.log("다녀옴");
 
-                    // 받아온 내용이 저장되는 변수 
-                    let text = xhr.responseText;
-                    console.log(text);
+                // 가서 받아온 내용이 저장되는 변수 responseText                 
+                let text = xhr.responseText;
 
-                    // 받아온 글씨를 json객체로 변경
-                    // let data = JSON.parse(text);
-                    // console.log(data);
+                console.log(text);
 
-                    // console.log(data[0].username);
+                // 받아온 글씨를 json 객체로 변경                 
+                let data = JSON.parse(text);
 
-                    // html로 된 글씨를 받아온 경우 
-                    // dom으로 바꿔서 필요한 정보를 얻어보자 
-                    let doc = new DOMParser().parseFromString(text, 'text/html');
-                    let html = doc.getElementById("32-ajax-response").innerHTML;
-                    console.log(html);
+                console.log(data);
 
-                }
+                console.log(data[0].username)
+            }
+        }
+
+        function doAjaxPoiema() {
+            // ajax 객체 생성
+            let xhr = new XMLHttpRequest();
+
+            // 보낼 준비
+            xhr.open('get', 'https://poiemaweb.com/js-ajax');
+
+            // 보내기 (단 , 언제 끝날지 모름)
+            xhr.send();
+
+            // 다녀온 후 ( 응답 이후 ) onload 를 써서 언제 다녀온지 알 수 있다 
+            xhr.onload = function () {    // load 이벤트가 되고 저장되는 변수에 저장 
+                console.log("다녀왔습니다");
+
+                // 받아온 내용이 저장되는 변수 
+                let text = xhr.responseText;
+                console.log(text);
+
+                // 받아온 글씨를 json객체로 변경
+                // let data = JSON.parse(text);
+                // console.log(data);
+
+                // console.log(data[0].username);
+
+                // html로 된 글씨를 받아온 경우 
+                // dom으로 바꿔서 필요한 정보를 얻어보자 
+                let doc = new DOMParser().parseFromString(text, 'text/html');
+                let html = doc.getElementById("32-ajax-response").innerHTML;
+                console.log(html);
 
             }
+
+        }
 
     </script>
 </head>
@@ -63,6 +139,8 @@
 <body>
     <button type="button" id="btn">ajax실행</button>
     <button type="button" id="btn2">Poiema</button>
+    <button type="button" id="btn3">jQuery ajax 방법 1</button>
+    <button type="button" id="btn4">jQuery ajax 방법 2</button>
 </body>
 
 </html>
