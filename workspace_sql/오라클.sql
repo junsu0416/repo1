@@ -135,6 +135,298 @@ where job not in ('MANAGER','SALESMAN','CLERK');
 -- between 최댓값,최솟값 입력하면 그 사이값을 알 수 있지만 oracle에서만 사용 가능
 -- ex : between a and b 
 
+----------------------------------6/21 
+select * from emp
+where sal between 2000 and 3000;
+
+--------------LIKE문----------------
+-- Like 는 문자열을 포함한 내용을 출력할 수 있는 방법 
+select * from emp 
+where ename like 'S%';
+-- 사원의 이름 찾기 
+-- _ : 어떤 값이든 상관없이 한 개의 문자 데이터를 의미
+-- % : 길이와 상관없이(문자 없는 경우도 포함) 모든 문자 데이터를 의미
+
+select * from emp where ename like 'A%';
+
+select * from emp 
+where ename like '_L%';
+-- 두번째 글자가 L인 사람 찾기 앞에 언더바 세번째 자리가 L인사람 찾으려면 ? 언더바 두개 후 L
+-- _는 딱 한 글자인데 어떤 글자던 관계없음 
+
+select * from emp 
+where ename like '%AM%';
+-- 글자가 어느 위치에 있건 AM이 붙어있는 이름 찾기
+-- ex ) ADAMS , JAMES
+
+-- %_M 이라고 하면 몇 글자일까 ? _M 즉 두 번쨰 글자가 M인것을 찾음 %는 아무대나 들어가도 상관 없기 때문 
+-- 응용해서 not like 도 가능 
+
+select * from emp
+where  comm <= 400;
+-- null은 연산처리도 안 되고 비교도 안 된다 
+
+select * from emp
+where comm = null;
+-- 이렇게 해도 null을 찾을 수 없다 
+
+select * from emp
+where comm is null;
+-- null 찾는 방법 
+
+select * from emp
+where comm is not null;
+-- null을 제외 하고 찾기 
+
+select empno , ename , sal , deptno from emp
+-- where deptno = 10 or 20 = deptno;
+where deptno in ( 10 , 20 );
+
+-------------집합 연산자 UNION ----------
+
+select empno , ename , sal , deptno from emp
+where deptno = 10
+
+union -- 테이블이 서로 다른 상태라고 가정하면 둘 조건 사이에 union을 사용하면 합쳐진다 
+      -- 서로 다른 조회 결과를 합쳐줌 // 단, 조회한 컬럼의 개수와 타입이 같아야한다 
+      -- 만일 컬럼명 위치가 달라진다면 그대로의 값이 그 위치에 그대로 적용됨 
+      -- ex) sal, deptno 의 값이 합쳐져서 보여짐 20 , 5000 이런식 
+select empno , ename , sal , deptno from emp
+where deptno = 20;
+
+-- 똑같은 값으로 출력한 결과 // 중복된 자료를 제거해줌 
+select empno , ename , sal , deptno from emp
+where deptno = 10
+
+union
+
+select empno , ename , sal , deptno from emp
+where deptno = 10;
+
+-----------
+-- union all은 값이 중복이 되도 제거하지 않고 전부 보여준다
+select empno , ename , sal , deptno from emp
+where deptno = 10
+
+union all 
+
+select empno , ename , sal , deptno from emp
+where deptno = 10;
+
+-- union , union all 은 다른 데이터베이스에서 사용가능하지만 
+-- minus( 차집합 처리 ) , intersect ( 교집합 처리 ) 는 oracle 전용
+
+-- q1
+select * from emp
+where ename like '%S';
+
+-- q2
+select empno , ename , job , sal , deptno from emp
+where deptno = 30 and job = 'SALESMAN'
+order by empno;
+
+-- q3 
+select empno , ename , job , sal , deptno from emp
+where sal > 2000 and deptno in (20,30);
+
+-- q3//2
+select empno , ename , job , sal , deptno from emp
+where sal > 2000 
+minus
+select empno , ename , job , sal , deptno from emp
+where deptno in(10);
+
+-- q4
+select * from emp
+where not sal >= 2000 and sal <= 3000;
+-- 위에 피드백 괄호 치는 게 좋다 
+
+-- q5
+select ename , empno , sal , deptno from emp
+where ename like '%E%'  
+and deptno = 30  
+and (sal < 1000 or sal > 2000);
+-- and not ( sal > 1000 and sal < 2000); 선생님 예시 
+
+-- q6
+select * from emp
+where 
+    comm is null
+    and mgr is not null
+    and job in ('MANAGER','CLERK')
+    and ename not like ('_L%');
+    -- 선생님이 푸신 것 
+    
+------------함수--------------
+
+Select ename , upper(ename), lower(ename) , initcap(ename)
+from emp;
+/*
+    upper : 대문자로 변경 lower : 소문자 변경 initcap : 앞에 글자만 대문자로 변경 
+*/
+
+select * from emp
+where lower (ename) like lower ('%Mi%');
+-- ename 도 소문자로 바꾸고 , Mi 도 소문자로 바꿔서 찾는 방법으로 활용가능 
+
+------------length
+
+select ename , length(ename)
+from emp;
+-- 글자열의 길이 찾기
+
+select * from emp
+where length(ename) >= 5;
+
+select length('한'), lengthb('한') from dual;
+-- lengthb 는 byte를 계산해주는 함수
+-- 한글은 한 글자당 3byte
+-- dual은 사용자가 임의로 만들 수 있는 테이블 이라고 생각하면 될듯 ?
+
+select job, substr(job, 1, 2), substr( job, 3, 2) , substr(job, 5)
+from emp;
+-- 컬럼에 넣을 수 있다 
+-- substr : 대상이 되는 문자 ,시작위치 , 가져올 개수 
+-- 가져올 개수를 안 쓰거나 너무 크면 끝까지 
+-- splice 같은 느낌 job행에 1, 첫글자로부터 2, 두번쨰까지
+-- ex) substr(job , -3, 2) 이렇게 뒤에서부터도 가능 
+-- 문자니깐 lower 같은 것도 적용가능 lower (substr(job , -3, 2))
+
+------ replace 함수 
+
+-- ex ) 대체할 문자가 있다면 바꾸고 없으면 삭제한다 
+-- replace(문자열 데이터 또는 열 이름(필수) , 찾는 문자(필수), 대체할 문자(선택))
+select job, replace(job, 'A', '*') from emp;
+
+-- 응용한 문제
+select 
+    job ,
+    length (job),
+    length (job) / 2,
+    substr(job , (length (job)+1) / 2, 1),
+    replace(
+        job,
+        substr(job , (length (job)+1) / 2, 1),
+        '*'
+        )
+from emp;
+
+--------L,R pad 함수 
+-- 문법 pad(문자열 데이터 또는 열이름(필수), 데이터의 자리수(필수), 빈 공간에 채울 문자(선택))
+-- 빈 공간을 채우기 위한 
+-- 채울 문자 생략시 공백문자 '   ';
+select 
+    job,
+    lpad(job , 10 , '#'),
+    lpad(job , 4, '#')
+from emp;
+
+select 
+    job , length(job), 15 - length(job),
+from emp;
+   
+select 
+    lpad(
+    job,
+    length(job) 
+    +(15 - (length(job)))/2,
+    '*')
+from emp;
+
+---------- concat 함수 : 문자끼리 합치는 방법 -------
+select empno || ename || '님'
+from emp;
+
+-- trim 은 앞 뒤 공백 제거     * 글씨 사이에 있는 공백은 제거 안 함 
+select 
+    '  a b c   ',
+    trim('  a b c   ')
+from dual;
+
+-- 실습문제 
+select 
+    '210612 - 3123456',
+    '210612 - 3******'
+from dual;
+
+select 
+    '210612 - 3123456',
+   -- substr ('210612-3123456', 1 , 8) , 
+   -- rpad ( '210612-3' , 14 , '*')
+    rpad ( 
+    substr ('210612-3123456', 1 , 8) , 
+    length ('210612-3123456'), 
+    '*'
+    )
+    
+from dual;
+
+-- 실습문제 2 ----
+
+-- 사원의 이름을 앞에 두자리만 보이게 하고 나머지는 *로 표시 
+-- 쉬운 버전 ) 앞 두글자 + '***'
+-- 정답의 예 : ward -> wa** , martin -> ma****
+
+select 
+    ename ,
+    rpad( substr( ename , 1 , 2),
+    length(ename),
+    '*')
+from emp;   
+    
+-- 문제 3    아까에서 앞글자만 *
+select 
+    ename,
+    replace(ename,substr(ename , 1 , 1),'*')
+from emp;
+
+
+-- 문제 4    두번째 글씨만 *
+select 
+    ename,
+    replace(ename,substr(ename , 2 , 1),'*')
+from emp;
+
+select 
+    ename, 
+    substr(ename, 1 ,1),
+    rpad( substr(ename, 1 ,1),2,'*'),
+    substr(ename, 3 ),
+    rpad((rpad( substr(ename, 1 ,1),2,'*')),length(ename),substr(ename, 3 ))
+from emp;
+
+-- 문제 5    가운데 글씨만 *
+
+select 
+    ename,
+    substr(ename , (length(ename)+1)/2 , 1),
+    substr(ename , 1 , length(ename)/2 ),
+    rpad(
+        substr(ename , 1 , length(ename)/2 ),
+        length(substr(ename , 1 , length(ename)/2 ))+1,
+        '*'),
+    rpad(
+        rpad(
+        substr(ename , 1 , length(ename)/2 ),
+        length(substr(ename , 1 , length(ename)/2 ))+1,
+        '*'),
+        length(ename),
+        substr(ename , 
+        length(ename)/2)) as 실습5
+from emp;
+
+select 
+    substr(ename , 1, length(ename)/2-0.5),
+    --substr = splice처럼 뽑아냄 1~2 까지 
+    rpad(substr(ename , 1, length(ename)/2-0.5),length(ename)/2+0.5,'*') ||
+    -- rpad 사용해서 별을 가운데에 넣었고 || 이걸로 붙혀서
+    substr(ename , length(ename) /2 +1.5 ,100)
+    -- 나머지 부분을 붙힘 
+from emp;
+
+
+
+
 
 
 
