@@ -420,13 +420,247 @@ select
     --substr = splice처럼 뽑아냄 1~2 까지 
     rpad(substr(ename , 1, length(ename)/2-0.5),length(ename)/2+0.5,'*') ||
     -- rpad 사용해서 별을 가운데에 넣었고 || 이걸로 붙혀서
-    substr(ename , length(ename) /2 +1.5 ,100)
+    substr(ename , length(ename) /2 +1.5)
     -- 나머지 부분을 붙힘 
 from emp;
 
+-- 선생님 예시 ----------------
+select 
+    length(ename)/2 + 1,
+    substr(ename , 1 , length(ename)/2-0.5) || '*' || substr(ename , length(ename)/2 + 1.5 )
+from emp;
+
+--------- trunc , ceil / floor 함수---------
+select  
+    trunc (1234.5678),
+    trunc (1234.5678 , 2),
+    trunc (1234.5678 , -2),
+    trunc (-12.34)
+from dual;
+
+select 
+    ceil(3.14),
+    floor(3.14),
+    ceil(-3.14),
+    floor(-3.14)
+from dual;
+
+-- 날짜 계산 함수 sysdate 
+-- sysdate : 지금 오라클의 접속된 pc의 시간 // 지금은 선생님 지정된 오라클의 시간 
+-- 강사 pc 는 9시간 정도 차이 남 
+-- 날짜 정보 중 일부만 select로 표시됨 
+-- -1 과 + 1로 날짜에 더하기 빼기 가능 
+select sysdate, sysdate + 1 , sysdate -1 from dual;  
+
+-- add_month 로 몇 개월 더한 결과를 반환할 수 있다 
+-- 오라클 자체의 날짜 계산 기능이 좋아서 + month - month 윤달 계산 등 할 수 있음 
+
+-- month_between 을 통해 두 날짜 데이터 간의 날짜 차이를 알 수 있음 
+
+-- next , last day의 함수도 있음 
+-- 특정 날짜를 기준으로 돌아오는 요일의 날짜를 출력해주는 함수 
+-- 날짜도 반올림/버림 도 가능함 
+
+-- 컬럼에 +를 적으면 모두 "숫자"로 변경해서 적용 ---------
+-- || 숫자도 "문자"로 적용 
+
+--////// to_char , to _number , to_date ////////////
+select to_char(sysdate+(9/24) , 'yyyy/mm/dd hh24:mi:ss') as 현재날짜시간
+from dual;
+
+-- 현재 날짜 - 학원 수강 처음 들었을 때의 날짜의 차이 
+select 
+    sysdate - to_date( '2024-05-07' , 'yyyy-mm-dd')
+from dual;
+
+-- 날짜만 넣고 시간을 넣지 않으면 시간이 나오지 않는다 
+
+-- nvl : null value 함수 //////////////////////////////////
+-- null에 값을 넣을 수 있음
+-- 연산을 할 수 있다 
+select 
+    comm, 
+    nvl(comm , -1),
+    sal,
+    sal + comm,
+    sal + nvl(comm , 0)
+from emp;
+
+select * from emp
+where comm = 0 or comm is null;
+-- 이걸 아래로 다르게 표현하자면 
+
+-- 이렇게도 표현 가능 
+-- nvl 전달인자를 comm 과 0을 갖고있는 애도 0으로 바꿔주는 것 
+select * from emp
+where nvl(comm , 0) = 0;
+-- nvl2 도 있다 // 열 또는 데이터를 입력하여 해당 데이터가 null이 아닐때와 null 일때 출력 데이터를 각각 저장 
+
+-- decode와 case문 
+
+-- decode /////////// 
+-- if문 같음 
+-- job인데 salesman 일 때 얼마 인상 , manager 일 땐 얼마 인상 이런식으로 사용할 수 있음 
+-- ex) job ,  salesman , sal * 1.1 이런식 
+
+
+-- case ////////////
+-- 많이 쓰이고 중요함 
+-- if문 같음 
+select empno , ename , job , sal ,
+    case job -- case 옆에 어떤 컬럼이 나올 수도 있고 안 나올 수도 있다 ,
+             -- case에 실행되는 job에서 같은 직업이 있다면 수당을 올리라는 내용 
+        when 'manager' then sal * 1.1 -- 조건이 맞으면 then이 실행됨 
+        when 'salesman' then sal * 1.05 
+        when 'analyst' then sal 
+        else sal * 1.03 
+    end as upsal -- end로 case문을 끝내줌 
+from emp;
+-- case 열고 end로 닫는다 
+-- case 열고 나서 컬럼명을 안 줘도 사용가능 
+select empno , ename , comm ,
+    case 
+        when comm is null then '해당없음'
+        when comm = 0 then '수당없음'
+        when comm > 0 then '수당 : '|| comm
+    end as comm_text 
+from emp;
+
+select 
+    case 
+        when 
+            comm is null
+            then 
+                -- 'N/A' 
+                0  -- = null을 0으로 설정하고 
+        else 
+          --  to_char(comm)
+          -- '' || comm 이렇게도 사용가능 
+          comm -- 위엔 comm이 문자로 변환됐으니 comm 숫자로 만들면 출력 가능 
+    end new_comm -- 컬럼명 설정 
+from emp;
+-- 숫자와 문자를 같이 case에서 비교할 수 없음 
+
+-- // 실습문제 
+-- q2 
+
+select empno , ename , sal, 
+    trunc( sal / 21.5, 2) as day_pay,
+    round( sal / 21.5 / 8 , 1) as time_pay
+from emp;       
+
+-- q3 
+select empno , ename , to_char(hiredate,'yyyy/mm/dd')as hiredate,
+    to_char(add_months(hiredate , 3) , 'yyyy/mm/dd')as r_job ,
+    nvl(to_char (comm) , 'N/A') as comm -- null 을 N/A로 바꾸려면 
+from emp;
+-- 월요일이 기준이 되게끔 하려면 
+-- next_day ( add_month(hiredate , 3 ) , 2 ) r_job // next day의 함수를 사용 
+-- 일요일은 1 , 월요일은 2 ... 
+
+
+-- q4
+select empno , ename , mgr ,
+    case
+        when mgr is null 
+            then 0000 
+        when mgr like '75%'
+            then 5555
+        when mgr like '76%'
+            then 6666
+        when mgr like '77%'
+            then 7777
+        when mgr like '78%'
+            then 8888
+        else mgr 
+    end as chg_mgr
+from emp;
+
+
+-- ///////////////// 하나의 열에 출력 결과를 담는 다중행 함수 
+select sum(sal), count(sal), count(*), count(comm) from emp;
+-- sum : 컬럼 병합 
+-- count 몇 줄 인지 파악 
+-- count ( comm ) 출력 했을 때 기본적으로 null을 제거하고 보여줌 
+-- count는 *을 많이 씀 
+
+select * from emp where ename like '%A%' ;
+
+select count (*) from emp where ename like '%A%' ;
+-- count를 통해서 a이 포함이 된 이름 갯수 찾기
+
+select max (sal) , max(ename) , min(hiredate) , min(comm) from emp;
+
+
+-- 부서별 급여 총합 표시
+select sum (sal) , avg(sal) from emp
+where deptno = 10
+union all
+select sum (sal) , avg(sal) from emp
+where deptno = 20
+union all
+select sum (sal) , avg(sal) from emp
+where deptno = 30;
+-- 급여의 평균값 
+-- 급여의 총합 
+
+
+select deptno, avg(sal), sum(sal), count(*)from emp
+group by deptno;
+-- 그룹화 시켜중 group by 함수 
+-- distinct 처럼 중복을 제거해줌 , 분류해줌
+-- select 에는 group by 한 것이나 다중행 함수 (집계함수) 만 올 수 있음 
+
+
+select deptno, empno from emp
+group by deptno , empno;
+-- deptno 와 empno 의 값을 다른 컬럼으로 구분되게 합쳐줌 
+-- 문법 순서는 select - from - where - group by - order by 
+
+select deptno ,job , count(*)
+from emp
+group by deptno , job
+order by deptno , job;
+-- 그룹화한 후에 order by 로 정렬 
+
+-- ////// having : group by절에서만 사용된다 
+-- 집계함수를 조건으로 걸고 싶을 때 
+-- having이 들어가려면 1.group by와 2.order by 사이에 들어감 
+
+select deptno , job , avg(sal)
+from emp 
+group by deptno , job
+    -- having avg(sal) >= 2000
+    -- having count(*) >= 2
+    having deptno = 20
+order by deptno , job;
+
+
+-- q1 
+select deptno ,trunc( avg(sal)) , max(sal) , min(sal) ,count(*) as cnt
+from emp
+group by deptno;
+
+--q2 
+select job , count(*) 
+from emp 
+group by job
+having count(job) >= 3;
+
+--q3
+select to_char(hiredate,'yyyy'), deptno , count(*)
+from emp
+group by to_char(hiredate,'yyyy'), deptno;
+
+--q4 
+select nvl2(to_char(comm) , 'x','o') , count(*)
+from emp
+group by nvl2(to_char(comm) , 'x','o');
 
 
 
+
+    
 
 
 
