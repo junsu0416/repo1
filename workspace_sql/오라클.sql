@@ -653,16 +653,234 @@ from emp
 group by to_char(hiredate,'yyyy'), deptno;
 
 --q4 
-select nvl2(to_char(comm) , 'x','o') , count(*)
+select nvl2(to_char(comm) , 'o','x') , count(*)
 from emp
-group by nvl2(to_char(comm) , 'x','o');
+group by nvl2(to_char(comm) , 'o','x');
 
 
+--///////////////////////////////////////////
+-- join
+
+select job , count(*) cnt
+from emp 
+where sal > 1000
+group by job
+having count(*) >= 3
+order by cnt desc;
+
+select * from emp , dept 
+order by empno;
+
+select 14 * 4 from dual;
+
+-- .은 소유격을 뜻함 emp.loc , deptno 같은 게 select에 들어가면 
+-- 구체적이지 않기 때문에 오류남 
+select emp.ename , dept.loc from emp , dept
+where emp.deptno = dept.deptno 
+order by empno;
+-- 테이블 두 개 이상 조회할 때 관계를 꼭 알려줘야 원하는 정보만 출력된다 
+-- 전체 테이블 수 - 1개의 조건이 적당하다 
+
+select * 
+from emp e , dept d
+where e.deptno = d.deptno;
+-- emp e 이처럼 별칭을 정해서 안에 넣고 그걸 e.deptno처럼 줄여쓰는게 가능 
+-- 만일 별칭을 지정했으면 지정한 별칭만 써야함 
+
+
+select ename ,e.* , d.* 
+from emp e , dept d
+where e.deptno = d.deptno;
+-- *와 컬럼을 같이 쓰는 경우 
+-- *에 테이블을 지정해 줘야 한다
+
+select * from salgrade;
+
+select * 
+from emp e, salgrade s 
+where e.sal >= s.losal and e.sal <= s.hisal ;
+-- 등급이나 급여 다른 테이블에서 찾아내기
+-- where 문으로 e와 s 별칭을 사용해서 급여와 등급을 비교해서 찾아냄 
+
+select * from emp;
+
+select e1.empno , e1.ename , e1.mgr , e2.empno , e2.ename 
+from emp e1 ,emp e2
+where e1.mgr = e2.empno;
+-- // 첫번째 줄 e1이 갖고 있는 empno , ename , mgr 을 갖고 
+-- // e2가 empno , ename 을 갖고있고 
+-- // 그리고 둘쨋줄 갖고있었던 애들의 e1 과 e2를 갖고 오고 
+-- // 셋쨋줄 그 e1 ,e2 를 비교해서 겹치는 부분을 출력 ? 이런 내용인듯 
+
+select * 
+from emp join dept
+    using(deptno);
+-- using 에 둘 다 같은 컬럼명이 있는 경우만 쓸 수 있다 
+-- join ~ using 
+
+-- // join on 방식 
+select * 
+from emp join dept on(emp.deptno = dept.deptno);
+
+select *
+from emp e1 join emp e2 on(e1.mgr = e2.empno);
+
+
+select *
+from emp e1 left outer join emp e2 on(e1.mgr = e2.empno);
+-- left ,right outer join 
+-- null 값도 출력하는 ? 
+-- 왼쪽 테이블을 모두 출력하는 걸 보장해준다 
+
+-- quiz 1
+-- empno , ename , dname , loc 출력 : 결과 14줄 
+select empno , ename , dname , loc
+from emp , dept 
+where emp.deptno = dept.deptno;
+-- 일단 모든 것에서 출발 
+-- emp 필요 , dept 라는 테이블도 필요 
+-- emp 에 deptno 랑 dept 에 deptno가 필요 같은 줄에 나오게 
+select empno , ename , dname , loc
+from emp join dept using(deptno);
+-- join 방식 
+-- 위 셀렉에서 고른게 같으면 사용 가능 
+
+-- quiz 2 
+-- 사원번호 , 이름 , 부서명 , 급여등급을 출력 : 결과 14줄 
+select e.empno , e.ename , d.dname , s.grade
+from emp e, dept d, salgrade s
+where e.deptno = d.deptno -- 관계를 알려줌
+    and e.sal >= s.losal 
+    and e.sal <= s.hisal;
+
+
+select e.empno , e.ename , d.dname , s.grade
+from salgrade s , emp e join dept d using (deptno)
+where (e.sal >= s.losal and e.sal <= s.hisal);
+-- join 방식 
+
+
+-- quiz 3 
+-- 매니저보다 월급이 높은 사원의 이름 , 급여 , 매니저 이름 , 매니저 급여 
+
+select e1.ename , e1.sal, e2.ename , e2.sal 
+from emp e1 ,emp e2
+where e1.mgr = e2.empno
+    and e1.sal > e2.sal;
+    
+    
+-- 교제 1 
+select e.deptno , d.dname , e.empno , e.ename , e.sal 
+from emp e, dept d
+where e.deptno = d.deptno
+    and e.sal > 2000
+order by d.dname asc;
+
+
+-- 교제 2 
+select e.deptno , d.dname , trunc(avg(e.sal)) AVG_SAL, max(e.sal) MAX_SAL, min(e.sal) MIN_SAL , count(d.deptno) CNT
+from emp e , dept d
+where 
+    e.deptno = d.deptno
+      
+group by e.deptno, d.dname; -- e.sal 을 낀다면 sal의 값이 다 다르니깐 그룹화 시켜도 출력이 다 된다 
+
+-- 선생님 방법 2번 
+select e.deptno , d.dname , floor(avg(e.sal)) , max(e.sal) , min(e.sal) , count(*)
+from emp e left outer join dept d on (e.deptno = d.deptno)
+group by e.deptno , d.dname;
+-- 나랑 다른 점 : join , floor 
+
+
+-- 교제 3 
+select d.deptno , d.dname , e.empno, e.ename , e.job , e.sal 
+from emp e right outer join dept d on (e.deptno = d.deptno)
+order by deptno , ename;
+
+-- ////////// 정리 ////////////////////////////////////////////////////
+/*
+    - 출력순서 -
+    5. select // 출력할 것들        
+    1. from    // 테이블(들)       
+    2. where // 조건문 and , or 
+    3. group by // 같은 것끼리 묶어줌 
+      4. -> having // group by 된 조건을 이용하는 where 같은 것 
+    6. order by // 정렬하는 함수 - 정렬 1이 중복되는게 있을 때 정렬 2가 적용되는 원리 
+    
+    
+    //////////////////////////////////////////////////////////////////
+    
+    not // 결과를 반대로 만들어줌 
+    in // 일치하면서 or 조건 
+    like // % - 뭐든지 ( 심지어 없어도 ) ok 
+            _ - 어떤 글자든 딱 한 글자 
+            
+    is null - 'null'은 = 으로 구별할 수 없다 
+    is not null 
+    
+    union all 위와 아래 sql을 합쳐준다 (컬럼의 타입이 위 아래 같아야 한다)
+    union 은 중복되는 걸 '제거'하고 출력 
+    
+    upper 대문자 lower 소문자 바꿔주는 함수 (like에서 대소문자 구분없이 검색할 때 좋다)
+    length 
+    substr // 글씨 자르기 (원본 , 시작점 , 개수 )
+    replace // 바꾸기 (원본 , 바꿀대상 , 바꿀글씨)
+    l,r pad // 채우기 (원본 , 글씨길이 , 채울문자)
+    trim // 앞뒤 공백 제거 
+    ceil // 올림
+    floor // 내림 ( 음수일 때 주의)
+    
+    sysdate 현재시간 
+    
+    to_char // 문자로 변경 (형식을 줄 수 있다)
+    to_date // 글씨를 날자로 (전달인자를 줘야함)
+    nvl // 오라클 전용 null 처리
+    case when then else end  // 조건절 
+    
+    sum - 합 , count - 개수 세기 , avg - 평균값 
+
+    join // 1. from 에 테이블 , 테이블
+            2. join using (동일한 컬럼명일 때만 가능)
+            3. left , right outer join (합성 조건, 왼쪽이나 오른쪽에 정보를 전부 보여줌) 
+   
+   지금까지의 정리  
+*/ 
+
+--------------------------- 서브쿼리 -------------------------------------
+select sal from emp where ename = 'JONES';
+
+select * from emp 
+where sal > (select sal from emp where ename = 'JONES');
+--          값을 여기다가 넣어두고 불러오는 약간 콜백함수 느낌 // 테이블을 하나 더 만든 느낌 
+
+-- 단일행 서브쿼리 = 값처럼 사용할 수 있다 
+select * from emp
+where sal > (select avg(sal) from emp);
+
+select * from emp 
+where sal > (select sal from emp where ename = 'BLAKE');
+
+select * from emp
+where job = (select job from emp where ename = 'JONES');
+
+
+-- 다중행 서브쿼리 = 실행결과가 여러개인
+-- where 문에 들어가는 연산자 
+/*
+    in  - 메인쿼리의 데이터가 서브쿼리의 결과 중 하나라도 일치한 데이터가 있다면 true 
+    any , some - 메인쿼리의 조건식을 만족하는 서브쿼리의 결과가 하나 이상이면 true 
+    all - 메인쿼리의 조건식을 서브쿼리의 결과 모두가 만족하면 true 
+    in을 조금 많이 씀 , any 나 some은 비교적 적게 씀
+*/
+select * from emp
+where sal in(
+    select max(sal) 
+    from emp 
+    group by deptno
+    );
 
 
     
-
-
 
 
 
