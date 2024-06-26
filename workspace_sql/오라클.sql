@@ -880,9 +880,178 @@ where sal in(
     );
 
 
+-- from 절에 사용하는 서브쿼리 
+select * 
+from(
+    select * from emp where deptno = 10
+    );
     
+-- 줄 번호 출력 rownum 
+select rownum , emp.*
+from emp
+-- where rownum = 3;
+order by ename;
+-- 위 문제는 rownum을 먼저 적용 시키고 
+-- order by가 적용되니깐 
+-- 줄 번호가 엉망진창 되니깐 밑에처럼 변경해주기 
+-- where엔 rownum xx 
+
+select rownum , e.*
+from(
+    select * from emp order by ename
+) e;   
+-- from 에 서브쿼리의 값을 넣어줘서 
+-- 실행되는 순서를 바꾸는 아이디어 
+-- 근데 *엔 별칭이나 테이블 이름을 알려줘야하니깐
+-- from 서브쿼리 뒤에 별칭을 넣어줘서 *에 e.*이 될 수 있도록 
+
+select job , count(*) from emp
+group by job
+having count(*) >= 3;
 
 
+select *
+from (select job , count(*) cnt from emp
+      group by job) -- count에 cnt라는 별칭을 준 이유 where에서 쓰기 위해서 
+where cnt >= 3;     -- where에서 못 쓰는 이유 count는 숫자를 세는 함수기 때문 ?
 
+with e10 as (   -- e10 이 select 문의 별칭으로 
+    select * from emp where deptno = 10
+    ) 
+select * from e10;
+
+select ename , (select empno from emp) from e10;
+-- 이렇게 출력하게 되면 값이 한칸에 붙어있는 옆줄에 값이 너무 많기 때문에 출력이 안됨 
+-- 딱 하나의 값이 들어가게끔 ?
+-- from에 들어갈땐 상관 없다 ?
+
+-- q1
+select e.job , e.empno , e.ename, e.sal , e.deptno , d.dname from emp e ,dept d
+where job = (select job from emp where ename = 'ALLEN')
+and e.deptno = d.deptno
+order by sal desc;
+
+-- q2
+select e.empno , e.ename , d.dname , e.hiredate , d.loc ,e.sal, grade
+from emp e join  dept d using(deptno) left outer join salgrade s on(
+e.sal >= s.losal and e.sal <= s.hisal) 
+where sal > (select avg(sal) from emp)
+order by sal desc , empno asc;
+-- 여기서 못 풀었던 join을 이해하기 
+-- group by로도 할 순 있겠지만 
+-- join을 완벽히 이해 못함 join using으로 emp 와 dept 를 묶고 
+-- left outer join으로 조건을 줘서 salgrade를 또 묶어줌 
+-- // 선생님 방법은 조인 안 쓰고 비교만 해서 합쳐줌 
+
+-- q3 
+select empno , ename , job , deptno , dname , loc 
+from emp join dept using (deptno)
+where deptno = 10 -- deptno 가 10번인 애들만 뽑고 
+and not job in(select job from emp where deptno = 30); -- job이 없는 걸 뽑기 위해 job not in 
+
+
+-- // q4 선생님이 풀어주신 
+select empno , ename , sal , grade 
+from emp e
+left outer join salgrade s
+on (e.sal >= s.losal and e.sal <= s.hisal)
+where sal > (select max(sal) from emp where job = 'SALESMAN');
+
+-- 12장 /////////////////////////////////////////////////////////////////
+-- DDL / 데이터 정의어 : 데이터베이스 데이터를 보관 및 관리 하기 위해 제공되는 여러 객체를
+--                  생성 , 변경 , 삭제 관련 기능을 수행 
+
+desc emp;
+
+create table emp_ddl (
+    empno number(4), -- 0~ 9999 까지 4자리까지 넣을 수 있게 만들겠다는 제약 
+    ename varchar2(10), -- 이름은 10byte 까지 
+    job varchar2(9),    -- 제한보다 적은 글씨가 적히면 글씨 만큼의 공간만 차지 / 효율적 
+    mgr number(4),  -- empno와 같아야 함 연결이 되기 때문에 
+    hiredate date,
+    sal number(7,2),    -- 여기에 들어가는 숫자 2는 소수점 둘쨋자리까지 기록할 수 있다 
+    comm number(7,2),   
+    deptno number(2)
+);
+
+select * from emp_ddl;
+desc emp_ddl;
+
+create table dept_ddl
+as select * from dept;
+
+select * from dept_ddl;
+
+-- 다른 테이블의 일부를 복사하여 테이블 생성 
+create table emp_ddl_30
+as select empno , ename , sal from emp where deptno = 30;
+    
+select * from emp_ddl_30;
+
+
+-- emp 테이블을 복사하여 emp_alter 테이블 생성하기 
+create table emp_alter 
+as select * from emp;
+
+select * from emp_alter;
+
+alter table emp_alter 
+add hp varchar(20);
+-- hp 라는 컬럼을 생성해주는 
+
+alter table emp_alter 
+    rename column hp to tel; 
+
+select * from emp_alter;
+-- hp였던 이름을 가진 컬럼의 이름을 바꿔주기 
+    
+alter table emp_alter 
+modify empno number(5);
+
+desc emp_alter;
+-- modify 로 empno의 number 길이를 5자리까지 쓸 수 있게 
+-- 다만 길이를 키우고 다시 줄어들게 하는 건 불가능 
+
+alter table emp_alter 
+drop column tel;
+select * from emp_alter;
+-- tel column을 지우는 방법   
+
+rename emp_alter to emp_rename;
+
+select * from emp_rename;
+-- 테이블 명 바꾸기 
+
+-- 테이블 삭제하기 ///////////////////////////////////
+truncate table emp_rename; 
+
+drop table emp_rename;
+
+---- 10장 dml select문으로 테이블에 데이터를 추가, 변경 , 삭제할 때 사용하는 명령어  ------
+create table dept_temp
+as select * from dept;
+
+-- 테이블에 데이터를 추가해주는 ( 한 줄을 더 만들어주는 ) 
+-- 입력을 계속 해줄 수록 계속 한 줄이 추가된다 // 생성 
+select * from dept_temp;
+
+insert into dept_temp ( deptno , dname , loc )
+values (50 , 'DATABASE' , 'SEOUL');
+
+insert into dept_temp
+values (60 , 'network' , 'Busan') ;
+-- 대소문자 쓰는 대로 들어가고 차례를 지켜야함 
+-- 테이블 명에 괄호를 생략하면 모든 컬럼 
+
+insert into dept_temp(deptno , dname , loc )
+values (70 , '웹' ,null);
+-- 한글도 들어가고 null도 들어간다 '' 이렇게 넣어도 null 표시
+-- 그치만 자바에선 '' 이것은 null이 아니다 
+
+insert into dept_temp (deptno , loc)
+values (90 , '인천');
+-- 컬럼을 생략하게 되면 자동으로 널이 들어간다 ex) 90 , null , 인천 // 이렇게 나옴 
+
+select * from dept_temp where loc is null;
 
 
