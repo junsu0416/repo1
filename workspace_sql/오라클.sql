@@ -1054,4 +1054,201 @@ values (90 , '인천');
 
 select * from dept_temp where loc is null;
 
+-- 교제 272P 날짜 데이터 입력하기 ----------
+
+create table emp_temp
+as select * from emp;
+
+select * from emp_temp ;
+
+-- 날짜 지정해서 삽입 
+insert into emp_temp ( empno , ename , hiredate )
+values (9999, '홍길동' , '2001/01/01');
+
+insert into emp_temp ( empno , ename , hiredate )
+values (1111, '성춘향' , '2001/01/05');
+
+select empno , ename , hiredate from emp_temp ;
+-- 날짜 데이터는 문자 그대로 넣을 순 있지만 년월일 과 일월년의 차이가 있을 수 있음으로 
+-- to_date로 쓰는게 좋고 보편적으로 sysdate를 많이 쓴다 
+insert into emp_temp ( empno , ename , hiredate )
+values (2111 , '이순신' , to_date('2001-01-07')) ; -- to date 로 삽입 
+
+insert into emp_temp ( empno , ename , hiredate )
+values (3111 , '심청이', sysdate);  
+-- sysdate 로 삽입하기 
+
+insert into emp_temp
+select * from emp where deptno = 10;
+select * from emp_temp ;
+-- emp 테이블에 emp_temp 정보 넣기 
+
+-- ddl 은 데이터베이스를 정의 하고 실행하면 바로 커밋 
+
+-- //////////////////////////// update ///////////////////////////////////
+-- update 와 delete 는 where 가 가장 중요함 
+create table dept_temp2 
+as select * from dept;
+-- dept의 정보를 다시 만들고 
+update dept_temp2 
+    set loc = 'SEOUL';
+-- loc 컬럼이 '전부' 서울로 바뀜 
+-- 한 컬럼을 전부 바꿔 주는 듯 ?
+select * from dept_temp2;
+
+-- ///////////////////////// rollback ////////////////////////////////
+-- 수정된 내용을 되돌리고 싶을 때
+-- ex ) dept_temp2 가 전부 서울로 바뀌었으니 update 하기 전으로 rollback 됨 
+rollback;
+-- 서울로 바꾸기 이전 값으로 다시 rollback 
+
+update dept_temp2 
+set loc = 'SEOUL' ,
+    dname = 'DATAbase'
+where deptno = 40;
+-- 한 줄을 업데이트 해서 바꿔줌 
+-- where로 부서 번호 라인을 바꾸겠다는 문법인듯 
+
+-- /////////// 안전하게 하는 업데이트 순서 
+-- update 하기전에 
+-- select 로 where 조건이 정확한지 확인하고 
+-- where를 그대로 복사해서 update에 붙여넣기로 하기 
+select * from dept_temp2 
+where deptno = 40; -- 셀렉에서 내가 원하는 정보 추출해서 맞는 지 
+
+create table emp_temp2 
+as select * from emp;
+
+select * from emp_temp2 
+where job = 'MANAGER';
+
+-- emp_temp2 에서 
+-- 급여가 1000이하인 사원의 급여를 3프로 인상 
+select 
+    ename , sal , sal * 1.03
+from emp_temp2
+where sal <= 1000;
+
+update emp_temp2 
+set sal = sal * 1.03 ;
+
+select ename , sal from emp_temp2
+where sal <= 1000;
+
+delete emp_temp2;
+
+select * from emp_temp2;
+rollback;
+
+-- 이쯤에서 정리 -- 
+/*
+    with //
+    select 문을 미리 만들어서 별칭을 붙이고 테이블 처럼 사용한다 
+    서브쿼리 // 
+    select 안에 또 다른 select를 사용할 수 있다 
+    select 의 결과를 활용할 수 있는 곳에서는 아무데나 사용 가능하다 
+    
+    <ddl 자료 정의어 - 테이블의 구조 자체를 조작> // 
+    create | 만들기 , 
+    alter | 수정하기 - add : 컬럼 + 타입 추가 , rename : 컬럼명 수정 , modify : 컬럼 타입 수정 , drop : 컬럼 삭제 
+    drop | 지우기 , 
+    rename | 테이블 명 변경 
+    truncate | 테이블 내용 지우기 
+    commit이 자동으로 된다 
+    
+    <dml 자료 조작어>
+    (select도 dml임)
+    insert | 자료 추가 (삽입)
+    update | 자료 수정 where 주의 
+    delete | 자료 삭제 where 주의 
+*/
+
+-- //////////////////////// 트랜잭션 transaction ///////////////////////////// 
+/*
+    create 하고 insert 하고 update 하고 해서 마음에 안 들면 rollback 하고 
+    마음에 들어서 계속 유지하고 싶다면 commit을 하면 된다 그럼 영구적으로 rollback 하면 
+    commit 했던 구간으로 다시 돌아간다 
+    // 다시 한 번 강조하면 ddl의 명령어는 무조건 커밋 truncate drop create alter 등 
+*/
+
+-- /////////////////////////// 세션 session ////////////////////////////////
+-- 어떤 활동을 위한 시간이나 기간을 뜻함 , 오라클 데이터베이스 접속을 시작으로 관련 작업을 수행한 후 
+-- 접속을 종료하기 전까지 전체 기간을 의미 
+-- ex ) 세션만료 인터넷을 들어가는데 30분 이상 걸리면 세션만료 되듯
+
+-- ////////////////// lock ////////////////////////
+-- insert 나 update나 delete 등 하고 commit이나 rollback 을 해야 lock 이 안 걸린다 ?
+-- java 에서 연결해서 출력할 때 오류가 걸릴 수 있다 ? 
+-- 트랜잭션을 종료하지 않으면 락이 걸린 테이블의 작업수행에 제한을 받을 수 있음 
+
+select * from dict;
+-- 오라클이 설치될 때 이미 있는 메뉴얼 같은 것 
+select * from user_tables;
+-- 이렇게 하면 내가 만든 테이블 정보 
+
+-- index 색인  
+-- 오름차순 , 내림차순 따로 관리 
+-- 데이터베이스의 속도는 index를 쓰면 조금 더 빠르다 
+create index idx_emp_sal 
+       on emp(sal);
+    
+select * from user_indexes;
+drop index idx_emp_sal;
+-- index 삭제 
+
+-- 강제 hint 
+select  /* + index (idx_emp_sal */
+* from emp e 
+order by empno desc;
+
+-- plan
+-- sql developer에서는 상단 세번째 아이콘 '계획설명'
+-- cost : 비용 - 조회하는데에 있어서 들어가는 시간적 비용 50이하 정도가 빠르다 
+-- index를 적용시키면 보통 cost 가 낮아져서 빠르게 되는 것 
+
+-- view 
+-- 가상테이블 
+-- select 문을 계속 쓰면 힘드니깐 view 에 저장해놓고 사용할 수도 있고 (편리성)
+-- 한정된 정보만 볼 수 있게 제한을 걸어놓을 수도 있다 (보안성)
+-- create view 로 view 생성 
+-- view 로 where 나 그런 것들을 적용할 수 있음 
+
+-- /////////////////////seqeunce /////////////////////////////////
+-- 번호표 발행기 같은 역할 
+-- 아래 코드를 조금 편하게 해주는 역할이 sequence
+select max(empno)+1 from emp_temp2;
+insert into emp_temp2 (
+            empno , ename
+    )values (
+        ( select max(empno)+1 from emp_temp2) , '신입이2'
+    );
+select * from emp_temp2;
+-- 시퀀스는 증가하는 변수라고 생각하면 됨 
+
+create table tb_user (
+    user_id number ,
+    user_name varchar(30)
+);
+select * from tb_user;
+
+-- 시퀀스 기본값이 1씩 올라감 
+create sequence seq_user;
+select seq_user.nextval from dual;
+-- 조회할 때마다 +1 씩 증가됨 nextval
+
+select seq_user.currval from dual;
+-- 생성된 시퀀스의 현재 값을 보는 currval
+
+insert into tb_user(user_id , user_name)
+values ( seq_user.nextval , '유저명1');
+insert into tb_user(user_id , user_name)
+values ( seq_user.nextval , '유저명2');
+insert into tb_user(user_id , user_name)
+values ( seq_user.nextval , '유저명3');
+select * from tb_user;
+-- 만약 값이 마음에 안 들어서 바꾸고 싶으면 지우고 다시 해야함 
+
+
+
+
 
