@@ -1248,6 +1248,162 @@ values ( seq_user.nextval , '유저명3');
 select * from tb_user;
 -- 만약 값이 마음에 안 들어서 바꾸고 싶으면 지우고 다시 해야함 
 
+create sequence seq_test 
+start with 10000 -- 시작숫자 (기본값 1) / 10000 에서부터 시작 
+increment by 100; -- 증감 숫자 (기본값 1) / 100씩 증가
+
+-- 생성한 sequence에 nextval 를 사용하지 않은 경우 currval 을 사용 못 함 
+select seq_test.currval from dual;
+select seq_test.nextval from dual;
+
+-- //////////////////// 제약 조건 /////////////////////////////
+/*
+    not null - null을 허용하지 않음 , null을 제외한 데이터의 중복은 허용 
+    unique - 지정되지 않고 유일한 값을 가져야함 , 중복될 수 없고 null은 딱 한 번 허용 중복 x
+    primary key - 유니크랑 비슷함 대신 null 허용 안 하고 테이블에서 하나만 지정 가능 
+    foreign key - 다른 테이블의 어떤 컬럼을 참조하여 존재하는 값만 입력 가능 ex) dept 에 deptno 와 같은 
+    check - 설정한 조건식을 만족하는 데이터만 입력 가능 
+    굳이 안 해도 되는데 실수를 방지해주는 게 제약조건 
+*/
+
+------------ 무결성 
+/*
+    결함이 없는 성질 
+    ex ) int a = 1 이거을 a를 출력하면 1이 계속 나오듯 
+    
+    영역 무결성 - 열에 저장되는 값의 적정 여부를 확인 . 자료형 , 적절한 형식의 데이터 , null 여부 같은 정해 놓은 
+                범위를 만족하는 데이터임을 규정 
+    개체 무결성 - 테이블 데이터를 유일하게 식별할 수 있는 기본키는 반드시 값을 가지고 있어야 하며 
+                null 이 될 수 없고 중복될 수도 없음을 규정 
+    참조 무결성 - 참조테이블의 외래키 값은 참조 테이블의 기본키로서 존재해야 하며 null 가능 
+*/
+
+-- ///////// primary key \\\\\\\\\\
+/*
+    primary key , pk , 주요키 , 중요키 , 기본키
+    not null + unique 조건 
+    생성과 동시에 index도 생성해줌 
+    create table 에서는 primary key를 딱 하나만 지정 
+    두 개 이상의 컬럼을 primary key 지정 하려면 alter 사용 
+*/
+create table table_pk(
+    login_id  varchar(20) constraint pk_login primary key ,
+    login_pwd varchar(20) constraint nn_login not null,
+    tel       varchar(20) 
+);
+create table table_pk2(
+    login_id  varchar(20) constraint pk_login primary key ,
+    login_pwd varchar(20) constraint nn_login not null,
+    tel       varchar(20) 
+);
+
+insert into table_pk2 (login_id , login_pwd , tel)
+values (null , null, null);
+
+insert into table_pk2 (login_id , login_pwd , tel)
+values ('id' , null, null);
+-- pw 가 null 이라서 안 됨 
+insert into table_pk2 (login_id , login_pwd , tel)
+values ('id' , 'pwd', null);
+-- 이렇게 하면 되지만 밸류에 있는 값이 위 아이디 , 패스워드 , 텔 과 갯수가 다르면 오류 
+
+select * from user_constraints
+-- user_constraints : 사용자가 추가한 모든 제약 조건 확인 
+where table_name = 'TABLE_PK2';
+
+select * from user_indexes;
+-- user_indexes 내가 만든 index의 정보가 담겨져있음 
+
+create table table_pk3(
+    login_id  varchar(20) ,
+    login_pwd varchar(20) ,
+    tel       varchar(20) , 
+    
+    primary key ( login_id , login_pwd ) -- primary key 이렇게 사용하면 한 개 이상 고를 수 있음 
+);
+insert into table_pk3 
+values ('id1','pw1',null); -- id1 , pw1 이 들어갔지만 
+insert into table_pk3 
+values ('id1','pw2',null); -- 이것도 가능한 이유는 둘이 조합해서 유니크 한 것은 가능함 
+select * from table_pk3;
+
+select * from user_constraints
+where table_name = 'TABLE_PK3';
+
+create table dept_fk(
+    deptno1 number primary key ,
+    dname varchar2(14)
+);
+////////// foreign key  \\\\\\\\\\\\\\
+-- fk , 외래키 , 참조키 
+-- 대상이 되는 테이블의 컬럼과 같은 타입으로 지정해야 한다 
+-- 컬럼명은 서로 달라도 관계 없다 (보통은 같게 한다)
+-- 대상이 되는 컬럼은 pk이여야 한다 
+create table emp_fk(
+    empno number primary key ,
+    ename varchar2(10) ,
+    deptno number references dept_fk (deptno1) 
+--  deptno number reference dept_fk 만약 컬럼이 같다면 컬럼명 생략 가능 
+);
+// 폴링키 넣는 두 번째 방법 
+create table emp_fk2(
+    empno number primary key ,
+    ename varchar2(10) ,
+    deptno number , 
+    
+    foreign key (deptno)
+    references dept_fk (deptno1) 
+
+);
+
+insert into dept_fk 
+values (100 , '1강의실');
+
+insert into emp_fk 
+values ( 1 , '이름', 100); // 101로 쓴다면 101은 없으니깐 에러 
+
+update emp_fk set deptno = 101;
+// emp fk에서 100을 참조하고 있어서 수정 , 삭제 불가 
+
+update dept_fk set deptno1 = 101;
+delete dept_fk;
+truncate table dept_fk;
+// 위 세 줄은 싹다 오류 
+
+delete emp_fk;
+update dept_fk set deptno1 = 101;
+// 지우고 다시 업데이트를 실행하면 된다 
+
+create table table_default(
+    login_id  varchar(20) ,
+    login_pwd varchar(20) ,
+    tel varchar2(20) default '000-0000'
+);
+insert into table_default 
+values ('id','pw','010-1233-4567');
+insert into table_default (login_id , login_pwd)
+values('id2','pw2');
+select * from table_default;
+
+//////////////// 스키마 \\\\\\\\\\\\\\\\\\\\\\\\\\
+/*
+    구조 , 테이블들을 스키마라고 부름 대충 범위 ? 다른 사용자도 사용할 수 있음 
+    오라클 데이터베이스에 접속한 사용자와 연결된 객체 
+    index , sequence , table 등 들어감 
+    사용자가 즉 스키마 
+    사용자 생성은 create user 필수 
+    패스워드 생성 identified by 필수 
+    사용자 정보 변경은 alter user 
+    오라클 사용자 삭제는 drop user 
+    사용자와 객체 (스키마 ) 등 다 지우기 drop user ~ cascade 
+*/
+/////////// 권한 \\\\\\\\\\
+/*
+    사용자에 따라 사용 가능한 데이터가 달라지도록 설정할 수 있음 
+    오라클에서는 시스템 권한과 객체 권한로 분류 
+    권한 주는 방법 / grant ~ to ~ 
+    권한 취소 / revork ~ from ~ 
+*/
 
 
 
