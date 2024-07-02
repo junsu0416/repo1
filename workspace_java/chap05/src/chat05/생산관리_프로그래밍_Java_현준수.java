@@ -135,7 +135,7 @@ public class 생산관리_프로그래밍_Java_현준수 {
 				} 
 			
 			} else if(menu == 3) {
-				System.out.println("가격은 총 : " + cash + "원 입니다");
+				System.out.println("가격은 총 : " + cash + "원 입니다")	;
 				
 			} if(menu == 4) {
 				System.out.println("종료되었습니다");
