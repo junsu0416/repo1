@@ -1,4 +1,4 @@
-package 실습;
+package Quiz;
 
 public class FanExam {
 

@@ -8,6 +8,11 @@ public class CalcExam {
 		// 실행
 		
 		calc.execute();
+		System.out.println("------------------");
+		int a = 1;
+//		double b = (double)a;
+		double b = a;
+		calc.plus(1, 1.5);
 		
 
 	}

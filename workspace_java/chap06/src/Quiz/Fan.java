@@ -1,4 +1,4 @@
-package 실습;
+package Quiz;
 
 public class Fan {
 	
@@ -23,7 +23,9 @@ public class Fan {
 		
 	}
 	
-	
+	void println(String msg) {
+		System.out.println("abc");
+	}
 	
 	
 	
