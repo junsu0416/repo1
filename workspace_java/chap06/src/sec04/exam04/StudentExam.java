@@ -22,7 +22,7 @@ public class StudentExam {
 		String name = "아무거나";
 		
 		// s1.name 과 지금 여기에 String name을 쓰면 그 name은 아무관계 없음 
-		
+			
 		// 지역변수는 초기화 없이 사용 불가능 
 //		int a;
 //		System.out.println(a);
@@ -69,6 +69,8 @@ public class StudentExam {
 		System.out.println("----------------------------------");
 		Student s3 = new Student("아이디" , "패스워드");
 		s3.login("아이디" , "패스워드");
+		
+	
 		
 		
 	}

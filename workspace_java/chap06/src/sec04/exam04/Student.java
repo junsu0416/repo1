@@ -14,6 +14,7 @@ public class Student {
 	String pw;
 	boolean suc = true;
 	
+	
 	// 밑 study subject 에 저장값을 사용하기 위해 
 	int intel = 0; 	// 지식 
 	int stress = 0; // 스트레스 수치 
