@@ -15,7 +15,7 @@ public class Car {
 	
 	// setter 는 필드값을 수정할 수 있는 기능 
 	// 메소드명 : set + 필드명 ( 첫 글자만 대문자 )
-	// 전달인자 : 필드의 타입으로 된 변수 
+	// 전달인자 : 필드의 타입으로 된 변수 ㅌ₩
 	// 리턴타입 : 없음 
 	public void setSpeed(int speed) {
 		this.speed = speed;

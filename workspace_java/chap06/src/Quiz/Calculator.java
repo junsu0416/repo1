@@ -23,6 +23,10 @@ public class Calculator {
 		} 
 	}
 	
+	// equals 를  써야했음 
+	// null 의 값이 들어갈 걸	 생각했어야 했음
+	
+	
 	
 //	Calculator(int x , int y){
 ////		System.out.println("생성자 실행 ");
