@@ -7,7 +7,7 @@ public class CoffeeExam {
 		Starbucks starbucks = new Starbucks();
 		Coffee coffee = new Coffee();
 		Me me = new Me();
-		
+			
 		me.coffeeorder(starbucks);
 		me.coffeeorder(coffee);
 		
