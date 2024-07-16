@@ -28,5 +28,12 @@ public class Tv implements RemoteControl {
 		System.out.println("tv 현재 볼륨은 : " + this.vol);
 		
 	}
+	
+//	void a() {
+//		void b() {
+//			
+//		}
+//	}	메소드 안에 메소드 불가 
+
 
 }
