@@ -14,7 +14,10 @@
             });
 
             document.getElementById('commentBtn').addEventListener('click', function () {
+                // 입력된 답글 내용 가져오기 
                 let commentText = document.querySelector('.comment input[type="text"]').value;
+
+                // 새로운 답글 요소를 생성 
                 let newComment = document.createElement('div');
                 newComment.classList.add('comment');
 
@@ -30,12 +33,15 @@
                     </div>
                 `;
 
+                // 게시판 글 아래 답글 추가 
                 let commentContent = document.querySelector('.comment');
                 commentContent.appendChild(newComment);
 
+                // 입력창을 초기화 하고 
                 document.querySelector('.comment input[type="text"]').value = '';
 
                 // 클래스 이름으로 이벤트 리스너 추가
+                
                 newComment.querySelector('.recommentBtn').addEventListener('click', function () {
                     let recommentText = newComment.querySelector('input[type="text"]').value;
                     
@@ -50,43 +56,24 @@
                             <div class="content">
                                 ${recommentText}
                                 <br>
-                                <input type="text" placeholder="게시글에 대한 답글 내용을 여기에 작성합니다." style="width: 70%;">
-                                <button class="recommentBtn">댓글달기</button>   
                             </div>
                         `;
-
+                        
+                        
                         newComment.appendChild(newreComment);
                         newComment.querySelector('input[type="text"]').value = '';
+                        
+                        
                     }
                 });
 
+                
+
             });
-            let commentId = 1; // 초기 댓글 ID 설정
-
-        function addReply(parentId) {
-            let parentComment = document.getElementById(`comment-${parentId}`);
-            let replyText = document.getElementById(`reply-text-${parentId}`).value.trim();
-
-            if (replyText !== '') {
-                let newCommentId = ++commentId;
-                let replyDiv = document.createElement('div');
-                replyDiv.classList.add('comment', 'reply');
-                replyDiv.id = `comment-${newCommentId}`;
-                replyDiv.innerHTML = `
-                    <p>${replyText}</p>
-                    <div class="comment-form">
-                        <input type="text" id="reply-text-${newCommentId}" placeholder="대댓글을 입력하세요">
-                        <button onclick="addReply(${newCommentId})">댓글 달기</button>
-                    </div>
-                `;
-
-                parentComment.appendChild(replyDiv);
-                document.getElementById(`reply-text-${parentId}`).value = ''; // 입력 필드 초기화
-            }
-        }
 
         }
 
+        // 현재시간 및 날짜 반환 
         function getCurrentDate() {
             let now = new Date();
             let year = now.getFullYear();
@@ -101,9 +88,9 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f0f0f0;
+            font-family: Arial, sans-serif; /* 폰트 변경 */
+            line-height: 1.6;               /* 가독성용 줄 여유분 확인 */
+            background-color: #f0f0f0;      
             padding: 20px;
         }
 
@@ -147,8 +134,8 @@
         .comment .content {
             font-size: 0.9em;
             color: #555;
-            /* display: flex; */
-            align-items: center;
+            /* display: flex; */        /* flex 사용시 내용이랑 text 칸이 합쳐짐 */
+            /* align-items: center; */
         }
 
         .comment .content input[type="text"] {
@@ -159,32 +146,16 @@
 
         .comment .content button {
             padding: 5px 10px;
-            cursor: pointer;
+            cursor: pointer;    /* 버튼에 효과 */
         }
 
         .displayComment {
-            display: none;
+            display: none;  /* 댓글 작성하기 none을 하고 나서 이벤트로 block으로 바꿀 예정 */
         }
 
         .comment.reply {
-            background-color: #eaeaea;
-            margin-left: 20px;
-        }
-
-        .comment {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .reply {
-            margin-left: 20px;
-            border-color: #ddd;
-        }
-
-        .comment-form {
-            margin-top: 10px;
+            background-color: #eaeaea;  /* 배경색 */
+            margin-left: 20px;            /* 대댓글인 만큼 들여쓰기 */
         }
 
     </style>
@@ -212,21 +183,11 @@
     <div class="displayComment"> 
         <div class="comment">
             <div class="meta">
-                작성자: 닉네임 | 작성일: 2024년 7월 23일
+                <h2>작성자: 닉네임 | 작성일: 2024년 7월 23일</h2>
             </div>
             <div class="content">
                 <input type="text" placeholder="게시글에 대한 답글 내용을 여기에 작성합니다." style="width: 70%;">
                 <button id="commentBtn">댓글달기</button>
-            </div>
-        </div>
-    </div>
-    <div id="comments-container">
-        <!-- 초기 댓글 템플릿 -->
-        <div class="comment" id="comment-1">
-            <p>첫 번째 댓글입니다.</p>
-            <div class="comment-form">
-                <input type="text" id="reply-text-1" placeholder="대댓글을 입력하세요">
-                <button onclick="addReply(1)">댓글 달기</button>
             </div>
         </div>
     </div>

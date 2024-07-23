@@ -14,13 +14,27 @@
                 let newRow = document.createElement('div');
                 newRow.classList.add('row', 'new-employee');
 
-               
-
                 newRow.innerHTML = `
                         <input class="check-cell" type="checkbox">
                         <div class="cell"><input type="text" placeholder="이름"></div>
-                        <div class="cell"><input type="text" placeholder="직급"></div>
-                        <div class="cell"><input type="text" placeholder="부서"></div>
+                        <div class="cell">
+                            <select>
+                                <option value="" selected disabled hidden>선택해주세요</option>
+                                <option value="매니저">매니저</option>
+                                <option value="개발자">개발자</option>
+                                <option value="영업담당자">영업담당자</option>
+                                <option value="디자이너">디자이너</option>
+                            </select>
+                        </div>
+                        <div class="cell">
+                            <select>
+                                <option value="" selected disabled hidden>선택해주세요</option>
+                                <option value="기획팀">기획팀</option>
+                                <option value="엔지니어링팀">엔지니어링팀</option>
+                                <option value="영업팀">영업팀</option>
+                                <option value="디자인팀">디자인팀</option>
+                            </select>    
+                        </div>
                         <div class="cell"><input type="text" placeholder="전화번호"></div>
                         <div class="cell"><input type="text" placeholder="주소"></div>
                         <div class="cell"><input type="date"></div>
@@ -29,18 +43,7 @@
                 let employeeTable = document.querySelector('.employee-table');
                 employeeTable.appendChild(newRow);                                               // -------------- 여기까지가 정보 추가 
 
-                // 새로 추가된 직원에 대한 더블 클릭 이벤트 처리
-                newRow.addEventListener('dblclick', function () {
-                    let cells = newRow.querySelectorAll('.cell input');
-                    populateModal(cells);
-                });
-
-                 // 새로 추가된 직원 체크박스에 이벤트 리스너 추가
-                 newRow.querySelector('.check-cell').addEventListener('click', function () {
-                    syncHeaderCheckbox();
-                });
-
-                // 새로운 직원 추가 후 헤더 체크박스 동기화
+                // // 새로운 직원 추가 후 헤더 체크박스 동기화
                 syncHeaderCheckbox();
 
 
@@ -51,18 +54,24 @@
             // 저장 버튼 클릭 이벤트 처리 
             document.getElementById('saveBtn').addEventListener('click', function () {            // :::::::::::::::: 여기부터 저장버튼 클릭이벤트 ::::::::::::::::
                 let newRows = document.querySelectorAll('.new-employee');
-                newRows.forEach(function (newRow) {                                                       // forEach로 순회하면서 
+
+                newRows.forEach(function (newRow) {
+                    console.log(newRow.querySelector('.cell:nth-child(1)'));                                                       // forEach로 순회하면서 
                     let name = newRow.querySelector('.cell:nth-child(2) input').value;                  // 정보들의 값을 저장하게끔
-                    let position = newRow.querySelector('.cell:nth-child(3) input').value;
-                    let department = newRow.querySelector('.cell:nth-child(4) input').value;
+                    let position = newRow.querySelector('.cell:nth-child(3) select').value;
+                    let department = newRow.querySelector('.cell:nth-child(4) select').value;
                     let phoneNumber = newRow.querySelector('.cell:nth-child(5) input').value;       // 중간에 들어가는 ntn-child는 몇 번째에 
                     let address = newRow.querySelector('.cell:nth-child(6) input').value;
                     let startDate = newRow.querySelector('.cell:nth-child(7) input').value;        // :::::::::::::::: 여기부터 저장버튼 클릭이벤트 끝내고 ::::::::::::::::
 
-                    let newTableEntry = document.createElement('div');
-                    newTableEntry.classList.add('row');
+                    if (!name | !position | !department | !phoneNumber | !address | !startDate) {
+                        alert("필수 요소 입력");
+                    }
+                    else {
+                        let newTableEntry = document.createElement('div');
+                        newTableEntry.classList.add('row');
 
-                    newTableEntry.innerHTML = `
+                        newTableEntry.innerHTML = `
                         <input class="check-cell" type="checkbox">
                         <div class="cell">${name}</div>
                         <div class="cell">${position}</div>
@@ -72,37 +81,61 @@
                         <div class="cell">${startDate}</div>
                         `;
 
-                    let employeeTable = document.querySelector('.employee-table');
-                    employeeTable.appendChild(newTableEntry);
+                        let employeeTable = document.querySelector('.employee-table');
+                        employeeTable.appendChild(newTableEntry);
 
-                    // 새로 추가한 행은 삭제
-                    newRow.remove();
+                        // 새로 추가한 행은 삭제
+                        newRow.remove();
 
-                    // 새로 추가된 직원에 대해서도 더블 클릭 시 모달 처리
-                    newTableEntry.addEventListener('dblclick', function () {
+                        // 새로 추가된 직원에 대해서도 더블 클릭 시 모달 처리
+
                         let cells = newTableEntry.querySelectorAll('.cell');
-                        populateModal(cells);
-                    });
-                    syncHeaderCheckbox();
-
+                        cells.forEach(function (cell) {
+                            cell.addEventListener('dblclick', function () {
+                                populateModalForEdit(cells);
+                            })
+                        })
+                        syncHeaderCheckbox();
+                        alert('저장되었습니다.');
+                    }
                 });
-                // console.log('저장됐습니다:', name, position, department, phoneNumber, address, startDate);
-                // alert('저장됐습니다: ' + name + position + department + phoneNumber + address + startDate);
 
-                alert('저장되었습니다.');
             });
 
-             // 헤더 체크박스와 모든 직원 체크박스 동기화 함수
-             function syncHeaderCheckbox() {
+            // 헤더 체크박스와 모든 직원 체크박스 동기화 함수
+            function syncHeaderCheckbox() {
                 let headerCheckbox = document.getElementById('selectAllCheckbox');
                 let checkboxes = document.querySelectorAll('.check-cell');
 
-                checkboxes.forEach(function (checkbox, index) {
-                    if (index !== 0) { // 첫 번째 체크박스는 헤더 체크박스이므로 제외
-                        checkbox.checked = headerCheckbox.checked;
-                    }
+                headerCheckbox.addEventListener('click', function () {   // selectAllCheckbox 는 체크박스 첫번째 헤더 체크박스 // 클릭이벤트 처리
+                    checkboxes.forEach(function (checkbox, index) {             // check-cell class를 가진 체크박스 요소들을 반복하여 처리 
+                        if (index > 0) {                                        // 조건을 사용 첫번째 요소(헤더 체크박스) 는 제외 , 
+                            checkbox.checked = headerCheckbox.checked;       // 나머지 체크박스의 checked 상태를 selectAllCheckbox.checked 값으로 설정
+                        }
+                    });
                 });
+
+
+                checkboxes.forEach(function (checkbox, index) {         // 각 체크박스의 클릭 이벤트 
+                    checkbox.addEventListener('click', function () {
+                        if (index === 0 && !checkbox.checked) {
+                            headerCheckbox.checked = false;          // 첫 번째 체크박스(헤더 체크박스)가 선택 해제될 때 selectAllCheckbox.checked 값을 false로 설정
+                        } else {
+                            let allChecked = true;                          // else 
+                            for (let i = 1; i < checkboxes.length; i++) {   // 체크박스를 1부터 시작해서 하나씩 돌면서 체크가 되어 있는지 확인
+                                if (!checkboxes[i].checked) {               // 체크가 안 되어 있다면 false
+                                    allChecked = false;
+                                    break;
+                                }
+                            }
+                            headerCheckbox.checked = allChecked;         // false 값을 줌 
+                        }
+                    });
+                });
+
             }
+
+
 
             // 헤더 체크박스 클릭 시 모든 직원 체크박스 선택 및 해제
             document.getElementById('selectAllCheckbox').addEventListener('click', function () {
@@ -112,12 +145,6 @@
                 });
             });
 
-            // document.getElementById('cancleBtn').addEventListener('click', function () {
-            //     let rowToDelete = document.querySelector('.row input.check-cell:checked');
-            //     rowsToDelete.forEach(function (row) {
-            //         row.parentElement.remove();     // 선택된 목록 삭제
-            //     });                                  // 시행착오 1 
-            // });
 
             document.getElementById('deleteEmployeeBtn').addEventListener('click', function () {
                 // 삭제 버튼 클릭 시 처리
@@ -139,35 +166,7 @@
             });
 
             /////////////////////////////////////////////////////////////// checkbox ////////////////////////////////////////////////////////////////////
-            let selectAllCheckbox = document.getElementById('selectAllCheckbox');
-            let checkboxes = document.querySelectorAll('.check-cell');
-
-            selectAllCheckbox.addEventListener('click', function () {   // selectAllCheckbox 는 체크박스 첫번째 헤더 체크박스 // 클릭이벤트 처리
-                checkboxes.forEach(function (checkbox, index) {             // check-cell class를 가진 체크박스 요소들을 반복하여 처리 
-                    if (index > 0) {                                        // 조건을 사용 첫번째 요소(헤더 체크박스) 는 제외 , 
-                        checkbox.checked = selectAllCheckbox.checked;       // 나머지 체크박스의 checked 상태를 selectAllCheckbox.checked 값으로 설정
-                    }
-                });
-            });
-
-
-            checkboxes.forEach(function (checkbox, index) {         // 각 체크박스의 클릭 이벤트 
-                checkbox.addEventListener('click', function () {
-                    if (index === 0 && !checkbox.checked) {
-                        selectAllCheckbox.checked = false;          // 첫 번째 체크박스(헤더 체크박스)가 선택 해제될 때 selectAllCheckbox.checked 값을 false로 설정
-                    } else {
-                        let allChecked = true;                          // else 
-                        for (let i = 1; i < checkboxes.length; i++) {   // 체크박스를 1부터 시작해서 하나씩 돌면서 체크가 되어 있는지 확인
-                            if (!checkboxes[i].checked) {               // 체크가 안 되어 있다면 false
-                                allChecked = false;
-                                break;
-                            }
-                        }
-                        selectAllCheckbox.checked = allChecked;         // false 값을 줌 
-                    }
-                });
-            });
-
+            syncHeaderCheckbox();
 
 
             /////////////////////////////////////////////////////////////////////////    checkbox <<<<끝>>>>>>     ///////////////////////////////////////////////////////////
@@ -184,38 +183,104 @@
                 modal.style.display = 'none';
             });
 
-            window.addEventListener('click', function (event) {
+            window.addEventListener('click', function (event) {//모달 화면에서 밖에를 눌러서 나가게 하기
                 if (event.target === modal) {
                     modal.style.display = 'none';
                 }
             });
 
-            // 각 행을 더블 클릭할 때 모달에 정보 채우고 모달을 보이게 함
+
+            // 모달 수정 ------------------------------------------------------------------
+
+            // 직원 정보 편집을 위해 모달에 데이터를 채우는 함수
+            function populateModalForEdit(cells) {
+                document.getElementById('modalNameInput').value = cells[0].textContent;
+                document.getElementById('modalPositionInput').value = cells[1].textContent;
+                document.getElementById('modalDepartmentInput').value = cells[2].textContent;
+                document.getElementById('modalPhoneNumberInput').value = cells[3].textContent;
+                document.getElementById('modalAddressInput').value = cells[4].textContent;
+                document.getElementById('modalStartDateInput').value = cells[5].textContent;
+                modal.style.display = 'block';
+
+                editingRow = cells[0].closest('.row');//row에 끝부분에 추가하는 코드
+
+            }
+
+            // 저장 버튼 클릭 이벤트 처리
+            document.getElementById('updateEmployeeBtn').addEventListener('click', function () {
+
+                // 모달에서 입력된 값 가져오기
+                let name = document.getElementById('modalNameInput').value;
+                let position = document.getElementById('modalPositionInput').value;
+                let department = document.getElementById('modalDepartmentInput').value;
+                let phoneNumber = document.getElementById('modalPhoneNumberInput').value;
+                let address = document.getElementById('modalAddressInput').value;
+                let startDate = document.getElementById('modalStartDateInput').value;
+
+                // 수정된 데이터로 행 업데이트
+                editingRow.querySelector('.cell:nth-child(2)').textContent = name;
+                editingRow.querySelector('.cell:nth-child(3)').textContent = position;
+                editingRow.querySelector('.cell:nth-child(4)').textContent = department;
+                editingRow.querySelector('.cell:nth-child(5)').textContent = phoneNumber;
+                editingRow.querySelector('.cell:nth-child(6)').textContent = address;
+                editingRow.querySelector('.cell:nth-child(7)').textContent = startDate;
+
+                // 모달 닫기
+                document.getElementById('employeeModal').style.display = 'none';
+
+                alert("저장되었습니다.");
+            });
+
+            // 행을 더블 클릭하여 직원 정보 편집
             let rows = document.querySelectorAll('.row:not(.header)');
             rows.forEach(function (row) {
-                row.addEventListener('dblclick', function () {
-                    let cells = row.querySelectorAll('.cell');
-                    populateModal(cells);
+                let cells = row.querySelectorAll(".cell");
+                cells.forEach(function (cell) {
+                    cell.addEventListener('dblclick', function () {
+                        populateModalForEdit(cells);
+                    })
+                })
+            });
+
+
+            // 모달 닫기 버튼 이벤트 리스너
+            closeBtn.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            /////////////////////////////////////////////////////////////// 검색 기능 ///////////////////////////////////////////////////////////////////////
+
+            document.getElementById('searchEmployeeBtn').addEventListener('click', function () {
+                let searchText = document.getElementById('searchInput').value.trim().toLowerCase(); // 공백 제거 및 소문자로 변환
+                let rows = document.querySelectorAll('.employee-table .row:not(.header)');  // 직원행을 가져옴 
+
+                rows.forEach(function (row) {
+                    let cells = row.querySelectorAll('.cell');      // 각 셀들의 행을 가져오고 
+                    let found = false;                              // 검색어를 포함한 셀이 있는지 여부
+
+                    cells.forEach(function (cell, index) {
+                        if (cell.textContent.toLowerCase().includes(searchText)) {
+                            found = true;       // 검색어를 포함한 셀이 하나라도 있으면 found 를 true로 변경
+                        }
+                    });
+
+                    if (found) {
+                        row.style.display = ''; // 검색어를 포함한 행은 보이기
+                    } else {
+                        row.style.display = 'none'; // 포함하지 않은 행 숨기기
+                    }
                 });
             });
 
-            function populateModal(cells) {
-                document.getElementById('modalName').textContent = cells[0].textContent;
-                document.getElementById('modalPosition').textContent = cells[1].textContent;
-                document.getElementById('modalDepartment').textContent = cells[2].textContent;
-                document.getElementById('modalPhoneNumber').textContent = cells[3].textContent;
-                document.getElementById('modalAddress').textContent = cells[4].textContent;
-                document.getElementById('modalStartDate').textContent = cells[5].textContent;
-                modal.style.display = 'block';
-            }
+            //검색 input에서 엔터키 누르면 검색 버튼이 눌리게
+            document.querySelector('#searchInput').addEventListener('keyup', function () {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.querySelector('#searchEmployeeBtn').click();
+                }
+            })
 
         };
-
-
-
-
-
-
 
 
     </script>
@@ -252,20 +317,6 @@
             display: inline-table;
         }
 
-
-        /*
-            .row {
-            display: table-row;
-            }
-
-            
-            .cell {
-            display: table-cell;
-            border: 1px solid #ddd;
-            padding: 10px;
-            }  
-            */
-
         .row {
             display: flex;
             align-items: center;
@@ -301,10 +352,8 @@
 
         .new-employee {
             background-color: #f9f9f9;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border-collapse: collapse;
+            text-align: center;
         }
 
         /* -------------------------------------------- 더블 클릭 했을 시 css ------------------------------------------- */
@@ -380,16 +429,11 @@
             - 직원 표시
             - 직원 추가,삭제,수정
             직원 정보(이름,직급,부서,전화번호,주소,입사일)
-        -->
+    -->
     <div class="button-container">
         <button id="addEmployeeBtn">직원 추가</button>
         <button id="deleteEmployeeBtn">직원 삭제</button>
-        <!-- <button id="searchEmployeeBtn">직원 수정</button> -->
-
     </div>
-
-
-
 
     <div class="employee-table">
         <div class="row header">
@@ -447,40 +491,57 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div class="modal-header">
-                <h2>직원 정보</h2>
+                <h2>직원 정보 수정</h2>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <span class="label">이름:</span>
-                    <span id="modalName"></span>
+                    <input type="text" id="modalNameInput">
                 </div>
                 <div class="row">
                     <span class="label">직급:</span>
-                    <span id="modalPosition"></span>
+                    <select id="modalPositionInput">
+                        <option value="" selected disabled hidden>선택해주세요</option>
+                        <option value="매니저">매니저</option>
+                        <option value="개발자">개발자</option>
+                        <option value="영업담당자">영업담당자</option>
+                        <option value="디자이너">디자이너</option>
+                    </select>
                 </div>
                 <div class="row">
                     <span class="label">부서:</span>
-                    <span id="modalDepartment"></span>
+                    <select id="modalDepartmentInput">
+                        <option value="" selected disabled hidden>선택해주세요</option>
+                        <option value="기획팀">기획팀</option>
+                        <option value="엔지니어링팀">엔지니어링팀</option>
+                        <option value="영업팀">영업팀</option>
+                        <option value="디자인팀">디자인팀</option>
+                    </select>
                 </div>
                 <div class="row">
                     <span class="label">전화번호:</span>
-                    <span id="modalPhoneNumber"></span>
+                    <input type="text" id="modalPhoneNumberInput">
                 </div>
                 <div class="row">
                     <span class="label">주소:</span>
-                    <span id="modalAddress"></span>
+                    <input type="text" id="modalAddressInput">
                 </div>
                 <div class="row">
                     <span class="label">입사일:</span>
-                    <span id="modalStartDate"></span>
+                    <input type="date" id="modalStartDateInput">
                 </div>
             </div>
+            <button id="updateEmployeeBtn">저장</button>
         </div>
     </div>
 
     <div class="rightBtn">
         <button id="saveBtn">저장</button>
-        <button id="cancleBtn">취소</button>
+    </div>
+
+    <div class="button-container">
+        <input type="text" id="searchInput" placeholder="직원 검색">
+        <button id="searchEmployeeBtn">검색</button>
     </div>
 
 
