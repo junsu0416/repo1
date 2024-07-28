@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>생산 현황 대시보드</title>
+    <script>
+        // 가상의 생산 현황 데이터
+        const productionData = [
+            { month: 'Jan', amount: 500 },
+            { month: 'Feb', amount: 600 },
+            { month: 'Mar', amount: 700 },
+            // 나머지 데이터 생략
+        ];
+
+        // 가상의 불량품 비율 데이터
+        const defectRatioData = [
+            { month: 'Jan', ratio: 5 },
+            { month: 'Feb', ratio: 4 },
+            { month: 'Mar', ratio: 3 },
+            // 나머지 데이터 생략
+        ];
+
+        // 가상의 가동률 데이터
+        const uptimeData = [
+            { month: 'Jan', uptime: 95 },
+            { month: 'Feb', uptime: 96 },
+            { month: 'Mar', uptime: 97 },
+            // 나머지 데이터 생략
+        ];
+
+        // 함수: 데이터를 차트로 표시하는 기능
+        function renderChart(data, containerId) {
+            const chartContainer = document.getElementById(containerId);
+            // 실제로는 D3.js나 Chart.js 등의 라이브러리를 사용하여 그래프를 그리게 될 것입니다.
+            // 여기서는 간단하게 데이터를 텍스트로 표시하는 예제를 보여줍니다.
+            chartContainer.innerHTML = data.map(item => `<p>${item.month}: ${item.amount || item.ratio || item.uptime}</p>`).join('');
+        }
+
+        // 초기화: 각 차트 데이터를 그래프로 표시
+        function initDashboard() {
+            renderChart(productionData, 'productionChart');
+            renderChart(defectRatioData, 'defectRatioChart');
+            renderChart(uptimeData, 'uptimeChart');
+        }
+
+        // 페이지 로드 후 초기화 함수 호출
+        document.addEventListener('DOMContentLoaded', initDashboard);
+
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .section {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart {
+            height: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="section">
+            <h2>생산 현황</h2>
+            <div id="productionChart" class="chart"></div>
+        </div>
+        <div class="section">
+            <h2>불량품 비율</h2>
+            <div id="defectRatioChart" class="chart"></div>
+        </div>
+        <div class="section">
+            <h2>가동률</h2>
+            <div id="uptimeChart" class="chart"></div>
+        </div>
+    </div>
+</body>
+
+</html>
