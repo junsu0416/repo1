@@ -403,21 +403,27 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {      
+             // DOMContentLoaded 이벤트가 발생하면 실행되는 함수
             let rows = document.querySelectorAll('.table-row');
 
-
+            // 모든 .table-row 요소에 클릭 이벤트 리스너 추가
             rows.forEach(function (row) {
                 row.addEventListener('click', function () {
                     let flag = true;
+
+                    // 클릭된 행이 이미 highlight 클래스를 가지고 있으면 flag를 false로 설정
                     if (this.classList[1] == 'highlight') {
                         flag = false;
                     }
+
+                     // 모든 행에서 highlight와 clicked 클래스를 제거
                     rows.forEach(function (row) {
                         row.classList.remove('highlight', 'clicked');
                     });
 
 
+                    // flag가 true인 경우에만 클릭된 행에 highlight와 clicked 클래스를 추가
                     if (flag) {
                         this.classList.add('highlight', 'clicked');
                     }
@@ -429,20 +435,24 @@
                 });
             });
 
+             // 버튼 요소를 가져옴
             let CBT = document.getElementById('changeBtn');
             let ABT = document.getElementById('addBtn');
             let SBT = document.getElementById('svBtn');
             let high;
 
 
+            // "changeBtn" 버튼 클릭 시 실행되는 함수
             CBT.addEventListener('click', function () {
                 if (!document.querySelector('.highlight')) {
                     console.log("선택된 row가 없다")
                 }
                 else {
+                    // 선택된 행의 첫 번째 셀을 제외한 모든 셀을 가져옴
                     let a = document.querySelector('.highlight').querySelectorAll('td:not(:first-child)');
                     high = document.querySelector('.highlight');
                     a.forEach(function (td) {
+                         // 셀에 .cell 클래스를 가진 input 요소가 없으면 추가
                         if (!td.querySelector('.cell')) {
                             td.innerHTML = `
                                 <input class="cell" type="text" value=${td.textContent}>
