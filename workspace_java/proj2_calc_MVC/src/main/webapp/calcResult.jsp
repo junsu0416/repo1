@@ -10,6 +10,7 @@
 
 	<h1>num1 : ${param.num1 }</h1>
 	<h1>num2 : ${param.num2 }</h1>
+	<h1>result : ${param.result }</h1>
 	
 <%-- 	<h1>sum :  ${param.num1 + param.num2 } </h1> --%>
 	${ 100 }<br>

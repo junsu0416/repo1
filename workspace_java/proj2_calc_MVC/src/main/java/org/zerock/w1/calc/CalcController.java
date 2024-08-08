@@ -43,8 +43,10 @@ public class CalcController extends HttpServlet {
 		System.out.println("textarea1 : " + textarea1);
 		
 		String[] chk1s = request.getParameterValues("chk1");
+		if( chk1s != null ) {
 		for(int i=0; i < chk1s.length; i++) {
 			System.out.println(chk1s[i]);
+			}
 		}
 		
 		
@@ -57,6 +59,23 @@ public class CalcController extends HttpServlet {
 		String num2 = request.getParameter("num2");
 		System.out.println("num1 : " + num1);
 		System.out.println("num2 : " + num2);
+		
+		int result = 0;
+		
+		try {
+			
+		result = Integer.parseInt(num1) + Integer.parseInt(num2);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// 절대 주소
+		response.sendRedirect("/proj2_calc_MVC/calcResult.jsp?result=" + result);
+		// 상대 주소
+//		response.sendRedirect("../calcResult.jsp?result=" + result);
+		
+		
 	}
 
 }

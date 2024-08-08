@@ -23,7 +23,9 @@
 		<input type= "number" name= "num1">
 		<input type= "number" name= "num2">
 		<button type="submit">SEND-post</button>
+		<hr>
 	</form>
+	
 	
 	<form action ="/proj2_calc_MVC/Calc/makeResult" method="get">
 		<input type="text" name="text1" value="text2"><br>
@@ -57,6 +59,9 @@
 		
 		<button type="submit">SEND-get</button>
 	</form>
+	
+	전달 받은 값 : ${param.text }
+	
 	
 </body>
 </html>
