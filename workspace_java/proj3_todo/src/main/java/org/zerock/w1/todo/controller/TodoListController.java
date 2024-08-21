@@ -25,6 +25,8 @@ public class TodoListController extends HttpServlet {
 		request.setAttribute("list1" , todoList);
 		
 		request.getRequestDispatcher("/WEB-INF/todo/list.jsp").forward(request , response);
+		
 	}
 
+	
 }

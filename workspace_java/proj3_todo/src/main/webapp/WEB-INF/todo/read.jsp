@@ -42,6 +42,9 @@
 <%--       <c:param name="tno" value="${dto.tno }" /> --%>
    </c:url>
    <a href="${ url1 }"><input type="button" value="목록으로 돌아가기"></a>
+   
+   
+   
 
 
 

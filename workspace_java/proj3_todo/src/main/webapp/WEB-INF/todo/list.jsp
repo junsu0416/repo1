@@ -17,6 +17,11 @@
       padding: 0 20px;
       text-align: center;
    }
+   	div {
+   		border : 1px solid red;
+   		padding : 10px;
+   		margin : 10px;
+   	}
    
 </style>
 </head>
@@ -38,6 +43,7 @@
 <%--       <input type="checkbox">${ list2.title }  ${ list2.dueDate }<br> --%>
 <%--    </c:forEach> --%>
    
+   <a href="register"> <input type="submit" value="글쓰기"> </a>
    <table border="1">
    <tr>
       <td>
