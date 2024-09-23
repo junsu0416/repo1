@@ -30,8 +30,9 @@
             </tr>
         </tbody>
     </table>
-    <input type="submit" value="수정">
+    <a href="/proj4_emp2/emp/update?empno=${empDTO.empno }"><input type="button" value="수정"></a>
  </form>
+ 
  <form method="post" action="delete">
  <input type="submit" value="삭제">
  </form>

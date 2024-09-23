@@ -46,7 +46,11 @@ public class EmpDAO {
 		
 	}
 	
-	public List selectEmp(String empno1) {
+	public List selectEmp(String empno1 ) {
+			return selectEmp(empno1, 1 , 10);
+	}
+	
+	public List selectEmp(String empno1 , int start , int end) {
 		List list = new ArrayList();
 		
 		try {
@@ -59,9 +63,19 @@ public class EmpDAO {
 	         PreparedStatement ps = null;
 	         
 	         if(empno1 == null) {
-	        	 query = "SELECT * FROM emp2";
+//	        	 query = "SELECT * FROM emp2";
+	        	 	query =  " select * ";
+	             	query += " from ( ";
+	                query += "    select rownum rnum, empno, ename ";
+	                query += "    from ( ";
+	                query += "        select empno, ename ";
+	                query += "        from emp ";
+	                query += "        order by ename ";
+	                query += "    ) ";
+	                query += " ) ";
+	                query += " where rnum >= ? and rnum <= ?";
 	         } else if (empno1 != null) {
-	        	 query = "SELECT * FROM emp2 where empno = ?";
+	        	 	query = "SELECT * FROM emp2 where empno = ?";
 	         }
 	         ps = con.prepareStatement(query);
 	         
@@ -186,6 +200,45 @@ public class EmpDAO {
 		
 		
 	}
+	
+	public int update(EmpDTO empDTO) {
+		
+		int result = -1;
+		
+		try {
+			
+			Context ctx = new InitialContext();
+			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle");
+			
+			Connection con = dataFactory.getConnection();
+			
+			String query = " UPDATE emp2";
+				   query += " SET ename = ? , job = ? , hiredate = ? , deptno = ?";
+				   query += " WHERE empno = ?";
+				   
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, empDTO.getEname());
+			ps.setString(2, empDTO.getJob());
+			ps.setDate(3, empDTO.getHireDate());
+			ps.setInt(4, empDTO.getDeptno());
+			ps.setInt(5, empDTO.getEmpno());
+			
+			result = ps.executeUpdate();
+			
+			ps.close();
+			con.close();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(result);
+		return result;
+		
+	}
+	
+	
 
 	
 
