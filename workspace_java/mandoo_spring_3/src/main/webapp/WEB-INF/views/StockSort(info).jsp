@@ -77,8 +77,8 @@
         const data = [];
 
         <c:forEach var="orderinfo" items="${list}">
-            labels.unshift('${orderinfo.order_time}');
-            data.unshift(${orderinfo.order_count});
+            labels.push('${orderinfo.order_time}');
+            data.push(${orderinfo.order_count});
         </c:forEach>
 
         // 데이터의 최대값을 기준으로 Y축 최대값 설정

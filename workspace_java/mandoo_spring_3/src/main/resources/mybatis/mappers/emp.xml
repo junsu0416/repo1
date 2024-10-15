@@ -547,9 +547,25 @@
 
 	<!-- stock_order -->
 	<select id="StockOrderSelect" parameterType="string" resultType="stockorderDTO">
-    SELECT *
-    FROM stock_order
-    WHERE order_name = #{stock_name}
+	SELECT 
+	    MIN(order_num) AS order_num, 
+	    order_supply, 
+	    TRUNC(order_time, 'MM') AS order_time, 
+	    SUM(order_count) AS order_count, 
+	    order_name 
+	FROM 
+	    stock_order 
+	WHERE 
+	    order_name = #{stock_Name}
+	    AND (order_time BETWEEN TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') AND LAST_DAY(ADD_MONTHS(SYSDATE, -1)) OR
+         order_time BETWEEN TRUNC(SYSDATE, 'MM') AND LAST_DAY(SYSDATE))
+	GROUP BY 
+	    order_supply, 
+	    TRUNC(order_time, 'MM'), 
+	    order_name 
+	ORDER BY 
+	    order_time
+
 
 	</select>
 	

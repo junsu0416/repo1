@@ -21,19 +21,23 @@
 
 		<div class="mtab" style="background-color: white;">
 			<form method="get" action="stockSort">
+				<div style=" text-align : left;">
 				<select name="item_Code" class="selectBox">
 					<option value="" ${empty param.item_Code ? 'selected' : ''}>전체</option>
 					<option value="P" ${param.item_Code == 'P' ? 'selected' : ''}>완제품</option>
 					<option value="I" ${param.item_Code == 'I' ? 'selected' : ''}>재료</option>
 				</select> <input type="submit" value="정렬">
+				</div>
 			</form>
 
 
 			<form method="get" action="StockSelect">
+				<div id="search-input" style="text-align : right;">
 				<input type="text" name="search" placeholder="검색어 입력">
 				<button type="submit" id="search-button">검색</button>
 				<button type="button" onclick="location.href='Stock'"
 					class="add-button">초기화</button>
+				</div>
 			</form>
 			<div id="open-add-popup"></div>
 		</div>
